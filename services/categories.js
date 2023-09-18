@@ -1,7 +1,6 @@
-import { createRequire } from "node:module";
-import { products } from "../products.js";
+import { products } from "../utils/products.js";
+import { require } from "../utils/require.js";
 
-const require = createRequire(import.meta.url);
 const categories = require("../categories.json");
 
 class CategoriesService {
@@ -13,11 +12,6 @@ class CategoriesService {
   }
   async findProducts(id) {
     return products.filter((product) => product.category.id.toString() === id);
-  }
-  async random() {
-    const index = Math.floor(Math.random() * categories.length);
-    const category = categories[index];
-    return category;
   }
 }
 

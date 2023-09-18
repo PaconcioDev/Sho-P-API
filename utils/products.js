@@ -1,7 +1,13 @@
 import { faker } from "@faker-js/faker";
-import { CategoriesService } from "./services/categories.js";
+import { require } from "./require.js";
 
-const categoriesService = new CategoriesService;
+const categories = require("../categories.json");
+
+function randomCategory() {
+  const index = Math.floor(Math.random() * categories.length);
+  const category = categories[index];
+  return category;
+}
 
 let products = [];
 (() => {
@@ -11,7 +17,7 @@ let products = [];
       id: faker.string.uuid(),
       name: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
-      category: categoriesService.random(),
+      category: randomCategory(),
       price: parseInt(faker.commerce.price(), 10),
       image: faker.image.url(),
     });

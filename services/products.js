@@ -1,4 +1,4 @@
-import { products } from "../products.js";
+import { products } from "../utils/products.js";
 
 class ProductService {
   async find() {
