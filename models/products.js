@@ -1,12 +1,13 @@
 import { products } from "../utils/products.js";
 
-class ProductService {
-  static find = async () => {
+class ProductModel {
+  static async getAll() {
     return products;
-  };
-  static findOne = async ({id}) => {
+  }
+  
+  static async findOne({ id }) {
     return products.find((product) => product.id === id);
-  };
+  }
 }
 
-export { ProductService };
+export { ProductModel };
