@@ -4,15 +4,15 @@ import { require } from "../utils/require.js";
 const categories = require("../categories.json");
 
 class CategoriesService {
-  async find() {
+  static find = async () => {
     return categories;
-  }
-  async findOne(id) {
+  };
+  static findOne = async ({ id }) => {
     return categories.find((category) => category.id.toString() === id);
-  }
-  async findProducts(id) {
+  };
+  static findProducts = async ({ id }) => {
     return products.filter((product) => product.category.id.toString() === id);
-  }
+  };
 }
 
 export { CategoriesService };
