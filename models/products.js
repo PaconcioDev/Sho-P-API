@@ -1,4 +1,5 @@
-import { products } from "../utils/products.js";
+import { require } from "../utils/require.js";
+const products = require("../products.json");
 
 class ProductModel {
   static async getAll() {
