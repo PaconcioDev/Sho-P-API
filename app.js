@@ -9,6 +9,7 @@ const app = express();
 
 app.use(cors(options));
 app.disable("x-powered-by");
+app.use(express.json());
 
 routerApi(app);
 
