@@ -7,5 +7,6 @@ productsRouter.get("/", ProductController.getAll);
 productsRouter.get("/:id", ProductController.findOne);
 
 productsRouter.post("/", ProductController.create);
+productsRouter.patch("/:id", ProductController.partialUpdate);
 
 export { productsRouter };

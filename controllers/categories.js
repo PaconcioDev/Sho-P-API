@@ -9,15 +9,24 @@ class CategoryController {
   static async findOne(req, res) {
     const { id } = req.params;
     const category = await CategoryModel.findOne({ id });
-    if (!category)
+
+    if (!category) {
       return res.status(404).json({ message: "Category not found" });
+    }
+
     res.json(category);
   }
 
-  static async findProducts(req, res)  {
+  static async findProducts(req, res) {
     const { id } = req.params;
     const filteredProducts = await CategoryModel.findProducts({ id });
-    if (!filteredProducts) return res.status(404).json({ message: "Theres no products on that category" });
+
+    if (!filteredProducts) {
+      return res
+        .status(404)
+        .json({ message: "Theres no products on that category" });
+    }
+
     res.json(filteredProducts);
   }
 }

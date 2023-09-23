@@ -6,7 +6,7 @@ const category = z.enum(["Clothes", "Electronics", "Furnitures", "Toys", "Others
 const price = z.number().int().min(1);
 const image = z.string().url();
 
-const createMovieSchema = z.object({
+const productSchema = z.object({
   name: name,
   description: description,
   category: category,
@@ -14,8 +14,12 @@ const createMovieSchema = z.object({
   image: image,
 });
 
-function validateMovie(object) {
-  return createMovieSchema.safeParse(object);
+function validateProduct(object) {
+  return productSchema.safeParse(object);
 }
 
-export { validateMovie };
+function validatePartialProduct(object) {
+  return productSchema.partial().safeParse(object);
+}
+
+export { validateProduct, validatePartialProduct };
