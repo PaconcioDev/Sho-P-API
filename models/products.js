@@ -39,6 +39,16 @@ class ProductModel {
 
     return products[productIndex];
   }
+
+  static async delete({ id }) {
+    const productIndex = products.findIndex((product) => product.id === id);
+
+    if (productIndex === -1) return false;
+
+    products.splice(productIndex, 1);
+
+    return true;
+  }
 }
 
 export { ProductModel };
