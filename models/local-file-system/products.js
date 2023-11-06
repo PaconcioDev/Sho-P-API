@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { require } from "../utils/require.js";
-import { completeCategory } from "../utils/completeCategory.js";
+import { require } from "../../utils/require.js";
+import { completeCategory, updateCategory } from "../../utils/category.js";
 
 const products = require("../products.json");
 const categories = require("../categories.json");
@@ -34,7 +34,7 @@ class ProductModel {
     products[productIndex] = {
       ...products[productIndex],
       ...input,
-      category: completeCategory(categories, input),
+      category: updateCategory(products, productIndex, categories, input),
     };
 
     return products[productIndex];

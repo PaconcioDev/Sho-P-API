@@ -1,4 +1,4 @@
-import { require } from "../utils/require.js";
+import { require } from "../../utils/require.js";
 
 const categories = require("../categories.json");
 const products = require("../products.json");

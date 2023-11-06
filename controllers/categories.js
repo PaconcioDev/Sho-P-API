@@ -1,4 +1,4 @@
-import { CategoryModel } from "../models/categories.js";
+import { CategoryModel } from "../models/local-file-system/categories.js";
 
 class CategoryController {
   static async getAll(req, res) {

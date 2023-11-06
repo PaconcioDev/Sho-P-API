@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./app.js",
+    "start:mysql": "nodemon ./server-with-mysql.js",
+    "start:local": "nodemon ./server-with-local.js",
     "start": "node app.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"
@@ -34,6 +35,7 @@
   "dependencies": {
     "cors": "2.8.5",
     "express": "4.18.2",
-    "zod": "3.22.2"
+    "mysql2": "^3.6.3",
+    "zod": "^3.22.4"
   }
 }
