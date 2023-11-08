@@ -92,7 +92,7 @@ class ProductModel {
   }
 
   static async update({ id, input }) {
-    this.findOne(id);
+    this.findOne({ id });
 
     try {
       await connection.query(
@@ -109,7 +109,7 @@ class ProductModel {
   }
 
   static async delete({ id }) {
-    this.findOne(id);
+    this.findOne({ id });
 
     const [products] = await connection.query(
       `DELETE FROM product

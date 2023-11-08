@@ -10,6 +10,11 @@ const createCategoryRouter = ({ categoryModel }) => {
   categoriesRouter.get("/:id", categoryController.findOne);
   categoriesRouter.get("/:id/products", categoryController.findProducts);
 
+  categoriesRouter.post("/", categoryController.create);
+  categoriesRouter.patch("/:id", categoryController.update);
+
+  categoriesRouter.delete("/:id", categoryController.delete);
+
   return categoriesRouter;
 };
 

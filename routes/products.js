@@ -10,7 +10,7 @@ const createProductRouter = ({ productModel }) => {
   productsRouter.get("/:id", productController.findOne);
 
   productsRouter.post("/", productController.create);
-  productsRouter.patch("/:id", productController.partialUpdate);
+  productsRouter.patch("/:id", productController.update);
   productsRouter.delete("/:id", productController.delete);
 
   return productsRouter;

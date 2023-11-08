@@ -19,9 +19,43 @@ class CategoryModel {
         const { category, ...cleanedProduct } = product;
         return {
           ...cleanedProduct,
-          category_id: category.id
+          category_id: category.id,
         };
       });
+  }
+  static async create({ input }) {
+    const lastCategory = categories.length - 1;
+    const lastId = categories[lastCategory].id;
+
+    const newCategory = {
+      id: lastId + 1,
+      ...input,
+    };
+
+    categories.push(newCategory);
+    return newCategory;
+  }
+
+  static async update({ id, input }) {
+    const categoryIndex = categories.findIndex((category) => category.id === parseInt(id));
+
+    if (categoryIndex === -1) return false;
+
+    categories[categoryIndex] = {
+      ...categories[categoryIndex],
+      ...input,
+    };
+
+    return categories[categoryIndex];
+  }
+  static async delete({ id }) {
+    const categoryIndex = categories.findIndex((category) => category.id === parseInt(id));
+
+    if (categoryIndex === -1) return false;
+    
+    categories.splice(categoryIndex, 1);
+
+    return true;
   }
 }
 

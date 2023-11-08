@@ -39,7 +39,7 @@ class ProductController {
     res.status(201).json(newProduct);
   };
 
-  partialUpdate = async (req, res) => {
+  update = async (req, res) => {
     const result = validatePartialProduct(req.body);
 
     if (!result.success) {
