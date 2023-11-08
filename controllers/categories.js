@@ -1,25 +1,27 @@
-import { CategoryModel } from "../models/local-file-system/categories.js";
-
 class CategoryController {
-  static async getAll(req, res) {
-    const categoriesJson = await CategoryModel.getAll();
-    res.json(categoriesJson);
+  constructor({ categoryModel }) {
+    this.categoryModel = categoryModel;
   }
 
-  static async findOne(req, res) {
+  getAll = async (req, res) => {
+    const categoriesJson = await this.categoryModel.getAll();
+    res.json(categoriesJson);
+  };
+
+  findOne = async (req, res) => {
     const { id } = req.params;
-    const category = await CategoryModel.findOne({ id });
+    const category = await this.categoryModel.findOne({ id });
 
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
     }
 
     res.json(category);
-  }
+  };
 
-  static async findProducts(req, res) {
+  findProducts = async (req, res) => {
     const { id } = req.params;
-    const filteredProducts = await CategoryModel.findProducts({ id });
+    const filteredProducts = await this.categoryModel.findProducts({ id });
 
     if (!filteredProducts) {
       return res
@@ -28,7 +30,7 @@ class CategoryController {
     }
 
     res.json(filteredProducts);
-  }
+  };
 }
 
 export { CategoryController };

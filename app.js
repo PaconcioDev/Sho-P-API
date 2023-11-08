@@ -4,7 +4,7 @@ import { routerApi } from "./routes/index.js";
 import { options } from "./utils/options.js";
 
 /* global process */
-const createApp = ({ productModel }) => {
+const createApp = ({ productModel, categoryModel }) => {
   const port = process.env.PORT || 3030;
   const app = express();
 
@@ -12,7 +12,7 @@ const createApp = ({ productModel }) => {
   app.disable("x-powered-by");
   app.use(express.json());
 
-  routerApi(app, productModel);
+  routerApi(app, productModel, categoryModel);
 
   app.listen(port, () => {
     console.log(`Listening on port http://localhost:${port}`);

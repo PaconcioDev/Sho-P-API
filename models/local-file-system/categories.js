@@ -11,9 +11,17 @@ class CategoryModel {
   static async findOne({ id }) {
     return categories.find((category) => category.id.toString() === id);
   }
-  
+
   static async findProducts({ id }) {
-    return products.filter((product) => product.category.id.toString() === id);
+    return products
+      .filter((product) => product.category.id.toString() === id)
+      .map((product) => {
+        const { category, ...cleanedProduct } = product;
+        return {
+          ...cleanedProduct,
+          category_id: category.id
+        };
+      });
   }
 }
 

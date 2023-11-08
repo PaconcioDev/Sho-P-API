@@ -1,13 +1,13 @@
-function completeCategory(categoryArr, input) {
-  return categoryArr.find((category) => category.name === input.category);
+function completeCategory(categoryArr, category_id) {
+  return categoryArr.find((category) => category.id === category_id);
 }
 
-function updateCategory(products, productIndex, categories, input) {
-  if (input.category) {
-    const category = completeCategory(categories, input);
+function updateCategory(products, productIndex, categories, category_id) {
+  if (category_id) {
+    const category = completeCategory(categories, category_id);
     return category;
   } else {
-    const category = products[productIndex].category;
+    const category = products[productIndex].category_id;
     return category;
   }
 }

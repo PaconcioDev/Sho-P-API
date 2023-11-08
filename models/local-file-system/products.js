@@ -15,10 +15,12 @@ class ProductModel {
   }
 
   static async create({ input }) {
+    const { category_id, ...cleanedInput } = input;
+
     const newProduct = {
       id: randomUUID(),
-      ...input,
-      category: completeCategory(categories, input),
+      ...cleanedInput,
+      category: completeCategory(categories, category_id),
     };
 
     products.push(newProduct);
@@ -27,14 +29,16 @@ class ProductModel {
   }
 
   static async update({ id, input }) {
+    const { category_id, ...cleanedInput } = input;
+
     const productIndex = products.findIndex((product) => product.id === id);
 
     if (productIndex === -1) return false;
 
     products[productIndex] = {
       ...products[productIndex],
-      ...input,
-      category: updateCategory(products, productIndex, categories, input),
+      ...cleanedInput,
+      category: updateCategory(products, productIndex, categories, category_id),
     };
 
     return products[productIndex];
