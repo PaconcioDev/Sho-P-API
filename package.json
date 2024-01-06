@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./app.js",
+    "start:mysql": "nodemon ./server-with-mysql.js",
+    "start:local": "nodemon ./server-with-local.js",
     "start": "node app.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"
@@ -28,12 +29,14 @@
     "url": "https://github.com/PaconcioDev/fake-shop-api/issues"
   },
   "devDependencies": {
+    "dotenv": "16.3.1",
     "eslint": "^8.49.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "3.0.1"
   },
   "dependencies": {
     "cors": "2.8.5",
     "express": "4.18.2",
-    "zod": "3.22.2"
+    "mysql2": "3.6.3",
+    "zod": "3.22.4"
   }
 }

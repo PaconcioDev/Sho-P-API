@@ -232,3 +232,4 @@ $RECYCLE.BIN/
 *.lnk
 mysql_data
 consults
+.env

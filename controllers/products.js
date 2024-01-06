@@ -1,16 +1,22 @@
-import { ProductModel } from "../models/products.js";
-import { validateProduct, validatePartialProduct} from "../schemas/products.js";
+import {
+  validateProduct,
+  validatePartialProduct,
+} from "../schemas/products.js";
 
 class ProductController {
-  static async getAll(req, res) {
-    const findProducts = await ProductModel.getAll();
-
-    res.json(findProducts);
+  constructor({ productModel }) {
+    this.productModel = productModel;
   }
 
-  static async findOne(req, res) {
+  getAll = async (req, res) => {
+    const findProducts = await this.productModel.getAll();
+
+    res.json(findProducts);
+  };
+
+  findOne = async (req, res) => {
     const { id } = req.params;
-    const product = await ProductModel.findOne({ id });
+    const product = await this.productModel.findOne({ id });
 
     if (!product) {
       return res.status(404).json({
@@ -19,21 +25,21 @@ class ProductController {
     }
 
     res.json(product);
-  }
+  };
 
-  static async create(req, res) {
+  create = async (req, res) => {
     const result = validateProduct(req.body);
 
     if (result.error) {
       return res.status(422).json({ error: JSON.parse(result.error.message) });
     }
 
-    const newProduct = await ProductModel.create({ input: result.data });
+    const newProduct = await this.productModel.create({ input: result.data });
 
     res.status(201).json(newProduct);
-  }
+  };
 
-  static async partialUpdate(req, res) {
+  update = async (req, res) => {
     const result = validatePartialProduct(req.body);
 
     if (!result.success) {
@@ -41,26 +47,28 @@ class ProductController {
     }
 
     const { id } = req.params;
-    const updatedProduct = await ProductModel.update({
+    const updatedProduct = await this.productModel.update({
       id,
       input: result.data,
     });
 
     res.json(updatedProduct);
-  }
+  };
 
-  static async delete(req, res) {
+  delete = async (req, res) => {
     const { id } = req.params;
-    const deletedProduct = await ProductModel.delete({ id });
+    const deletedProduct = await this.productModel.delete({ id });
 
     if (!deletedProduct) {
       return res.status(404).json({
-        message: "Product not found"
+        message: "Product not found",
       });
     }
 
-    res.status(200).json({ message: `Product with ID:${id} deleted successfully` });
-  }
+    res
+      .status(200)
+      .json({ message: `Product with ID:${id} deleted successfully` });
+  };
 }
 
 export { ProductController };
