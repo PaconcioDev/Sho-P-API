@@ -2,10 +2,9 @@ import express from "express";
 import cors from "cors";
 import { routerApi } from "./routes/index.js";
 import { options } from "./utils/options.js";
+import { config } from "./config.js";
 
-/* global process */
 const createApp = ({ productModel, categoryModel }) => {
-  const port = process.env.PORT || 3030;
   const app = express();
 
   app.use(cors(options));
@@ -14,8 +13,8 @@ const createApp = ({ productModel, categoryModel }) => {
 
   routerApi(app, productModel, categoryModel);
 
-  app.listen(port, () => {
-    console.log(`Listening on port http://localhost:${port}`);
+  app.listen(config.port, () => {
+    console.log(`Listening on port http://localhost:${config.port}`);
   });
 };
 

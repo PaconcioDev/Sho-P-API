@@ -1,14 +1,13 @@
 import mysql from "mysql2/promise";
+import { config } from "../../config.js";
 
-const config = {
-  host: "localhost",
-  user: "root",
-  port: 3306,
-  password: "rootpassword",
-  database: "shopdb",
-};
-
-const connection = await mysql.createConnection(config);
+const connection = await mysql.createConnection({
+  host: config.dbHost,
+  user: config.dbUser,
+  port: config.dbPort,
+  password: config.dbPassword,
+  database: config.dbName,
+});
 
 class ProductModel {
   static async getAll() {
