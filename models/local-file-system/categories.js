@@ -1,7 +1,7 @@
 import { require } from "../../utils/require.js";
 
-const categories = require("../categories.json");
-const products = require("../products.json");
+const categories = require("../local-file-data/categories.json");
+const products = require("../local-file-data/products.json");
 
 class CategoryModel {
   static async getAll() {

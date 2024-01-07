@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import { require } from "../../utils/require.js";
 import { completeCategory, updateCategory } from "../../utils/category.js";
 
-const products = require("../products.json");
-const categories = require("../categories.json");
+const products = require("../local-file-data/products.json");
+const categories = require("../local-file-data/categories.json");
 
 class ProductModel {
   static async getAll() {

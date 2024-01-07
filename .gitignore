@@ -233,3 +233,4 @@ $RECYCLE.BIN/
 mysql_data
 consults
 .env
+.vscode

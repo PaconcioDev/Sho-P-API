@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { config } from "../../config.js";
+import { config } from "../../config/config.js";
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
