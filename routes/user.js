@@ -10,6 +10,8 @@ const createUserRouter = ({ userModel }) => {
   usersRouter.get("/:id", userController.findOne);
 
   usersRouter.post("/", userController.create);
+  usersRouter.patch("/:id", userController.update);
+  usersRouter.delete("/:id", userController.delete);
 
   return usersRouter;
 };

@@ -12,7 +12,6 @@ const createCategoryRouter = ({ categoryModel }) => {
 
   categoriesRouter.post("/", categoryController.create);
   categoriesRouter.patch("/:id", categoryController.update);
-
   categoriesRouter.delete("/:id", categoryController.delete);
 
   return categoriesRouter;

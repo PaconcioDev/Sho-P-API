@@ -19,8 +19,21 @@ const userSchema = z.object({
   phone: phone.optional(),
 });
 
+const updateUserShcema = z.object({
+  name: name,
+  lastName: lastName,
+  email: email,
+  password: password,
+  phone: phone,
+});
+
+
 function validateUser(object) {
   return userSchema.safeParse(object);
 }
 
-export { validateUser };
+function validatePartialUser(object) {
+  return updateUserShcema.partial().safeParse(object);
+}
+
+export { validateUser, validatePartialUser };
