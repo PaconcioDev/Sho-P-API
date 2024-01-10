@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
+import bcrypt from "bcrypt";
 import {
   readFromLocalFile,
   writeToLocalFile,
@@ -34,9 +35,12 @@ class UserModel {
     if (isDuplicate === "phone") return "phone";
     if (isDuplicate === "email") return "email";
 
+    const hash = await this.encryptPassword({ password: input.password });
+
     const newUser = {
       id: randomUUID(),
       ...input,
+      password: hash,
     };
 
     const users = await readFromLocalFile(usersFilePath);
@@ -53,7 +57,7 @@ class UserModel {
     const userIndex = users.findIndex((user) => user.id === id);
 
     if (userIndex === -1) return false;
-    
+
     if (input.phone || input.email) {
       const isDuplicate = await this.isDuplicatePhoneOrEmail({
         phone: input.phone,
@@ -64,28 +68,30 @@ class UserModel {
       if (isDuplicate === "email") return "email";
     }
 
-    // eslint-disable-next-line no-unused-vars
-    const { password, ...cleanedUser } = users[userIndex];
-
     if (input.password) {
-      // eslint-disable-next-line no-unused-vars
-      const { password, ...cleanedInput } = input;
+      const hash = await this.encryptPassword({ password: input.password});
+
       users[userIndex] = {
-        ...cleanedUser,
-        ...cleanedInput,
+        ...users[userIndex],
+        ...input,
+        password: hash,
       };
 
       await writeToLocalFile(usersFilePath, users);
-      return users[userIndex];
+      // eslint-disable-next-line no-unused-vars
+      const { password, ...cleanedUser } = users[userIndex];
+      return cleanedUser;
     }
 
     users[userIndex] = {
-      ...cleanedUser,
+      ...users[userIndex],
       ...input,
     };
 
     await writeToLocalFile(usersFilePath, users);
-    return users[userIndex];
+    // eslint-disable-next-line no-unused-vars
+    const { password, ...cleanedUser } = users[userIndex];
+    return cleanedUser;
   }
 
   static async delete({ id }) {
@@ -105,6 +111,10 @@ class UserModel {
     if (phone && usersArr.some((user) => user.phone === phone)) return "phone";
     if (email && usersArr.some((user) => user.email === email)) return "email";
     return null;
+  }
+
+  static async encryptPassword({ password }) {
+    return await bcrypt.hash(password, 10);
   }
 }
 
