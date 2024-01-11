@@ -1,16 +1,7 @@
-import { randomUUID } from "node:crypto";
-import { fileURLToPath } from "node:url";
-import { resolve, dirname } from "node:path";
 import bcrypt from "bcrypt";
-import {
-  readFromLocalFile,
-  writeToLocalFile,
-} from "../../utils/readAndWriteLocal.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const usersFilePath = resolve(__dirname, "../../local-file-data/users.json");
+import { randomUUID } from "node:crypto";
+import { readFromLocalFile, writeToLocalFile} from "../../utils/readAndWriteLocal.js";
+import { usersFilePath } from "../../utils/filePath.js";
 
 class UserModel {
   static async getAll() {

@@ -1,23 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import { completeCategory, updateCategory } from "../../utils/category.js";
-import {
-  readFromLocalFile,
-  writeToLocalFile,
-} from "../../utils/readAndWriteLocal.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const productsFilePath = resolve(
-  __dirname,
-  "../../local-file-data/products.json"
-);
-const categoriesFilePath = resolve(
-  __dirname,
-  "../../local-file-data/categories.json"
-);
+import { readFromLocalFile, writeToLocalFile} from "../../utils/readAndWriteLocal.js";
+import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
 
 class ProductModel {
   static async getAll() {
