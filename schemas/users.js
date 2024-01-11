@@ -27,8 +27,12 @@ const updateUserShcema = z.object({
   phone: phone,
 });
 
+const loginSchema = z.object({
+  email: email,
+  password: password,
+});
 
-function validateUser(object) {
+function validateCreateUser(object) {
   return userSchema.safeParse(object);
 }
 
@@ -36,4 +40,8 @@ function validatePartialUser(object) {
   return updateUserShcema.partial().safeParse(object);
 }
 
-export { validateUser, validatePartialUser };
+function validateLogin(object) {
+  return loginSchema.safeParse(object);
+}
+
+export { validateCreateUser, validatePartialUser, validateLogin };

@@ -1,4 +1,4 @@
-import { validateUser, validatePartialUser } from "../schemas/users.js";
+import { validateCreateUser, validatePartialUser } from "../schemas/users.js";
 
 class UserController {
   constructor({ userModel }) {
@@ -24,7 +24,7 @@ class UserController {
   };
 
   create = async (req, res) => {
-    const result = validateUser(req.body);
+    const result = validateCreateUser(req.body);
 
     if (result.error) {
       return res.status(422).json({
