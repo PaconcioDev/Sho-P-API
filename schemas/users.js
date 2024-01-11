@@ -27,7 +27,6 @@ const updateUserShcema = z.object({
   phone: phone,
 });
 
-
 function validateUser(object) {
   return userSchema.safeParse(object);
 }
