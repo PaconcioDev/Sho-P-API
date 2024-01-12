@@ -20,8 +20,9 @@ class AuthController {
       return res.status(401).json({ error: "Invalid user or password" });
 
     return res.send({
-      name: user.name,
-      email: user.email,
+      name: user.user.name,
+      email: user.user.email,
+      token: user.token
     });
   };
 }

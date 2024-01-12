@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { checkAdminRole } from "../middlewares/auth.js";
 import { ProductController } from "../controllers/products.js";
 
 const createProductRouter = ({ productModel }) => {
@@ -9,9 +10,9 @@ const createProductRouter = ({ productModel }) => {
   productsRouter.get("/", productController.getAll);
   productsRouter.get("/:id", productController.findOne);
 
-  productsRouter.post("/", productController.create);
-  productsRouter.patch("/:id", productController.update);
-  productsRouter.delete("/:id", productController.delete);
+  productsRouter.post("/", checkAdminRole, productController.create);
+  productsRouter.patch("/:id", checkAdminRole, productController.update);
+  productsRouter.delete("/:id", checkAdminRole, productController.delete);
 
   return productsRouter;
 };
