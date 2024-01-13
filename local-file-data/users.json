@@ -37,7 +37,7 @@
   },
   {
     "id": "fe3c879d-33f5-4670-bc60-c4b06209a46b",
-    "role": "admin",
+    "role": "customer",
     "name": "Patching Hash",
     "lastName": "Example",
     "email": "hashexample@mail.com",

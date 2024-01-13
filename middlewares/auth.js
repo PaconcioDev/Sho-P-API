@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 
-function checkAdminRole(req, res, next) {
-  const authorization = req.get("authorization");
+const verifyToken = (authorization) => {
   let token = "";
   let decodedToken = {};
 
@@ -10,6 +9,12 @@ function checkAdminRole(req, res, next) {
     token = authorization.substring(7);
     decodedToken = jwt.verify(token, config.jwtSecret);
   }
+
+  return { token, decodedToken };
+};
+
+function checkAdminRole(req, res, next) {
+  const { token, decodedToken } = verifyToken(req.get("authorization"));
 
   if (!token || !decodedToken.id) {
     return res.status(401).json({ error: "Invalid or missing token" });
@@ -22,4 +27,18 @@ function checkAdminRole(req, res, next) {
   next();
 }
 
-export { checkAdminRole };
+function checkLogin(req, res, next) {
+  const { token, decodedToken } = verifyToken(req.get("authorization"));
+
+  if (!token || !decodedToken.id) {
+    return res.status(401).json({ error: "Invalid or missing token" });
+  }
+
+  if (!decodedToken) {
+    return res.status(401).json({ error: "Invalid User" });
+  }
+
+  next();
+}
+
+export { checkAdminRole, checkLogin };

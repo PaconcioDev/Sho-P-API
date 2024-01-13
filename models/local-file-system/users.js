@@ -30,6 +30,7 @@ class UserModel {
 
     const newUser = {
       id: randomUUID(),
+      role: "customer",
       ...input,
       password: hash,
     };
