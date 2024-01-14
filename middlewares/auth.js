@@ -41,4 +41,15 @@ function checkLogin(req, res, next) {
   next();
 }
 
-export { checkAdminRole, checkLogin };
+function isTheSameUser(req, res, next) {
+  const { id } = req.params;
+  const { token, decodedToken } = verifyToken(req.get("authorization"));
+
+  if (!token || decodedToken.id !== id) {
+    return res.status(401).json({ message: "Invalid or missing token" });
+  }
+
+  next();
+}
+
+export { checkAdminRole, checkLogin, isTheSameUser };
