@@ -14,7 +14,7 @@
     "name": "Same User",
     "lastName": "Example",
     "email": "example@email.com",
-    "password": "$2b$10$ervnypOTnznt23Oppq.6f.sn48HW3E8dmN637el6gkrVlCrXhXP4y",
+    "password": "$2b$10$4fR0Bt5vNkDTdajJVaquOeqIgUnRm4I3QolzA4kVFE7W1iLqhNt9C",
     "phone": "1234567811"
   },
   {
@@ -43,5 +43,14 @@
     "email": "hashexample@mail.com",
     "password": "$2b$10$UDA2pVkP9b2b1MFdwCCQ/uMoDLUMS1BdUYtOcxNMObRTJjKpJBx4W",
     "phone": "3324567345"
+  },
+  {
+    "id": "d75927f7-71a9-4fc9-8a0a-5f2d6d0fa3e4",
+    "role": "customer",
+    "name": "Nicol",
+    "lastName": "Paez",
+    "email": "nicolspp15@gmail.com",
+    "password": "$2b$10$UoZ7gVs7DVPuthGBB7.AtuXgYGJMEbVSyCQ7H9eG1WrwfS1YgL/3G",
+    "phone": "3416756765"
   }
 ]

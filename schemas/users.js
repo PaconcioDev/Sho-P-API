@@ -22,13 +22,20 @@ const updateUserShcema = z.object({
   name: name,
   lastName: lastName,
   email: email,
-  password: password,
   phone: phone,
 });
 
 const loginSchema = z.object({
   email: email,
   password: password,
+});
+
+const updatePasswordSchema = z.object({
+  password: password,
+});
+
+const sendEmailSchema = z.object({
+  email: email,
 });
 
 function validateCreateUser(object) {
@@ -43,4 +50,12 @@ function validateLogin(object) {
   return loginSchema.safeParse(object);
 }
 
-export { validateCreateUser, validatePartialUser, validateLogin };
+function validatePassword(object) {
+  return updatePasswordSchema.safeParse(object);
+}
+
+function validateEmail(object) {
+  return sendEmailSchema.safeParse(object);
+}
+
+export { validateCreateUser, validatePartialUser, validateLogin, validatePassword, validateEmail };

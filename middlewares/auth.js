@@ -38,6 +38,8 @@ function checkLogin(req, res, next) {
     return res.status(401).json({ error: "Invalid User" });
   }
 
+  req.token = decodedToken;
+  
   next();
 }
 

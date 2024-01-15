@@ -1,6 +1,9 @@
-import bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
-import { readFromLocalFile, writeToLocalFile} from "../../utils/readAndWriteLocal.js";
+import { encryptPassword } from "../../utils/encryptPassoword.js";
+import {
+  readFromLocalFile,
+  writeToLocalFile,
+} from "../../utils/readAndWriteLocal.js";
 import { usersFilePath } from "../../utils/filePath.js";
 
 class UserModel {
@@ -26,7 +29,7 @@ class UserModel {
     if (isDuplicate === "phone") return "phone";
     if (isDuplicate === "email") return "email";
 
-    const hash = await this.encryptPassword({ password: input.password });
+    const hash = await encryptPassword({ password: input.password });
 
     const newUser = {
       id: randomUUID(),
@@ -60,21 +63,6 @@ class UserModel {
       if (isDuplicate === "email") return "email";
     }
 
-    if (input.password) {
-      const hash = await this.encryptPassword({ password: input.password});
-
-      users[userIndex] = {
-        ...users[userIndex],
-        ...input,
-        password: hash,
-      };
-
-      await writeToLocalFile(usersFilePath, users);
-      // eslint-disable-next-line no-unused-vars
-      const { password, ...cleanedUser } = users[userIndex];
-      return cleanedUser;
-    }
-
     users[userIndex] = {
       ...users[userIndex],
       ...input,
@@ -103,10 +91,6 @@ class UserModel {
     if (phone && usersArr.some((user) => user.phone === phone)) return "phone";
     if (email && usersArr.some((user) => user.email === email)) return "email";
     return null;
-  }
-
-  static async encryptPassword({ password }) {
-    return await bcrypt.hash(password, 10);
   }
 }
 
