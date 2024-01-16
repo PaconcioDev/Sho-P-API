@@ -1,4 +1,4 @@
-import { validateCategory } from "../schemas/categories.js";
+import { handleProcessFailure } from "../utils/handleProccessFailure.js";
 
 class CategoryController {
   constructor({ categoryModel }) {
@@ -15,7 +15,8 @@ class CategoryController {
     const category = await this.categoryModel.findOne({ id });
 
     if (!category) {
-      return res.status(404).json({ message: "Category not found" });
+      handleProcessFailure(res, 404, "Category not found");
+      return;
     }
 
     res.json(category);
@@ -26,38 +27,34 @@ class CategoryController {
     const filteredProducts = await this.categoryModel.findProducts({ id });
 
     if (!filteredProducts) {
-      return res
-        .status(404)
-        .json({ message: "Theres no products on that category" });
+      handleProcessFailure(res, 404, "No products on this category");
+      return;
     }
 
     res.json(filteredProducts);
   };
 
   create = async (req, res) => {
-    const result = validateCategory(req.body);
-
-    if (result.error) {
-      return res.status(422).json({ error: JSON.parse(result.error.message) });
-    }
-
-    const newCategory = await this.categoryModel.create({ input: req.body });
+    const { validatedData } = req;
+    const newCategory = await this.categoryModel.create({
+      input: validatedData,
+    });
 
     res.status(201).json(newCategory);
   };
 
   update = async (req, res) => {
-    const result = validateCategory(req.body);
-
-    if (result.error) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
-    }
-
+    const { validatedData } = req;
     const { id } = req.params;
     const updatedCategory = await this.categoryModel.update({
       id,
-      input: result.data,
+      input: validatedData,
     });
+
+    if (!updatedCategory) {
+      handleProcessFailure(res, 404, "Category not found");
+      return;
+    }
 
     res.json(updatedCategory);
   };
@@ -67,9 +64,8 @@ class CategoryController {
     const deletedCategory = await this.categoryModel.delete({ id });
 
     if (!deletedCategory) {
-      return res.status(404).json({
-        message: "Category not found",
-      });
+      handleProcessFailure(res, 404, "Category not found");
+      return;
     }
 
     res

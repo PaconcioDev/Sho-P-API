@@ -1,4 +1,7 @@
-import { readFromLocalFile, writeToLocalFile} from "../../utils/readAndWriteLocal.js";
+import {
+  readFromLocalFile,
+  writeToLocalFile,
+} from "../../utils/readAndWriteLocal.js";
 import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
 
 class CategoryModel {
@@ -24,6 +27,7 @@ class CategoryModel {
         };
       });
   }
+
   static async create({ input }) {
     const categories = await readFromLocalFile(categoriesFilePath);
     const lastCategory = categories.length - 1;

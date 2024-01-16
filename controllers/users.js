@@ -1,4 +1,4 @@
-import { validateCreateUser, validatePartialUser } from "../schemas/users.js";
+import { handleProcessFailure } from "../utils/handleProccessFailure.js";
 
 class UserController {
   constructor({ userModel }) {
@@ -15,34 +15,22 @@ class UserController {
     const user = await this.userModel.findOne({ id });
 
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      handleProcessFailure(res, 404, "User not found");
+      return;
     }
 
     res.json(user);
   };
 
   create = async (req, res) => {
-    const result = validateCreateUser(req.body);
+    const { validatedData } = req;
 
-    if (result.error) {
-      return res.status(422).json({
-        error: JSON.parse(result.error.message),
-      });
-    }
-
-    const newUser = await this.userModel.create({ input: result.data });
-
+    const newUser = await this.userModel.create({ input: validatedData });
     if (newUser === "phone") {
-      res.status(422).json({
-        message: "This phone number is already registered",
-      });
+      handleProcessFailure(res, 422, "User already registered");
       return;
     } else if (newUser === "email") {
-      res.status(422).json({
-        message: "This email is already registered",
-      });
+      handleProcessFailure(res, 422, "User already registered");
       return;
     }
 
@@ -50,31 +38,23 @@ class UserController {
   };
 
   update = async (req, res) => {
-    const result = validatePartialUser(req.body);
-
-    if (result.error) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
-    }
-
+    const { validatedData } = req;
     const { id } = req.params;
     const updatedUser = await this.userModel.update({
       id,
-      input: result.data,
+      input: validatedData,
     });
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      handleProcessFailure(res, 404, "User not found");
+      return;
     }
 
     if (updatedUser === "phone") {
-      res.status(422).json({
-        message: "This phone number is already registered",
-      });
+      handleProcessFailure(res, 422, "User already registered");
       return;
     } else if (updatedUser === "email") {
-      res.status(422).json({
-        message: "This email is already registered",
-      });
+      handleProcessFailure(res, 422, "User already registered");
       return;
     }
 
@@ -86,7 +66,8 @@ class UserController {
     const deletedUser = await this.userModel.delete({ id });
 
     if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
+      handleProcessFailure(res, 404, "User not found");
+      return;
     }
 
     res.status(200).json({ message: "User successfully deleted" });

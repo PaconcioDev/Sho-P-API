@@ -4,19 +4,34 @@ import {
   checkLogin,
   // isTheSameUser
 } from "../middlewares/auth.js";
+import { handleValidationError } from "../middlewares/validation.js";
+import {
+  loginSchema,
+  sendEmailSchema,
+  updatePasswordSchema,
+} from "../schemas/users.js";
 
 const createAuthRouter = ({ authModel }) => {
   const authRouter = Router();
   const authController = new AuthController({ authModel });
 
-  authRouter.post("/login", authController.login);
+  authRouter.post(
+    "/login",
+    handleValidationError(loginSchema, "body"),
+    authController.login
+  );
   authRouter.post(
     "/change-password",
     checkLogin,
+    handleValidationError(updatePasswordSchema, "body"),
     // isTheSameUser
     authController.changePassword
   );
-  authRouter.post("/recovery", authController.recoverPassword);
+  authRouter.post(
+    "/recovery",
+    handleValidationError(sendEmailSchema, "body"),
+    authController.recoverPassword
+  );
 
   return authRouter;
 };

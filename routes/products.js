@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { checkAdminRole } from "../middlewares/auth.js";
 import { ProductController } from "../controllers/products.js";
+import { handleValidationError } from "../middlewares/validation.js";
+import { productSchema } from "../schemas/products.js";
 
 const createProductRouter = ({ productModel }) => {
   const productsRouter = Router();
@@ -10,8 +12,18 @@ const createProductRouter = ({ productModel }) => {
   productsRouter.get("/", productController.getAll);
   productsRouter.get("/:id", productController.findOne);
 
-  productsRouter.post("/", checkAdminRole, productController.create);
-  productsRouter.patch("/:id", checkAdminRole, productController.update);
+  productsRouter.post(
+    "/",
+    checkAdminRole,
+    handleValidationError(productSchema, "body"),
+    productController.create
+  );
+  productsRouter.patch(
+    "/:id",
+    checkAdminRole,
+    handleValidationError(productSchema, "body", true),
+    productController.update
+  );
   productsRouter.delete("/:id", checkAdminRole, productController.delete);
 
   return productsRouter;

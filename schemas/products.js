@@ -14,12 +14,4 @@ const productSchema = z.object({
   image: image,
 });
 
-function validateProduct(object) {
-  return productSchema.safeParse(object);
-}
-
-function validatePartialProduct(object) {
-  return productSchema.partial().safeParse(object);
-}
-
-export { validateProduct, validatePartialProduct };
+export { productSchema };

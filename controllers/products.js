@@ -1,7 +1,4 @@
-import {
-  validateProduct,
-  validatePartialProduct,
-} from "../schemas/products.js";
+import { handleProcessFailure } from "../utils/handleProccessFailure.js";
 
 class ProductController {
   constructor({ productModel }) {
@@ -19,38 +16,33 @@ class ProductController {
     const product = await this.productModel.findOne({ id });
 
     if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
+      handleProcessFailure(res, 404, "Product not found");
+      return;
     }
 
     res.json(product);
   };
 
   create = async (req, res) => {
-    const result = validateProduct(req.body);
+    const { validatedData } = req;
 
-    if (result.error) {
-      return res.status(422).json({ error: JSON.parse(result.error.message) });
-    }
-
-    const newProduct = await this.productModel.create({ input: result.data });
+    const newProduct = await this.productModel.create({ input: validatedData });
 
     res.status(201).json(newProduct);
   };
 
   update = async (req, res) => {
-    const result = validatePartialProduct(req.body);
-
-    if (!result.success) {
-      return res.status(400).json({ error: JSON.parse(result.error.message) });
-    }
-
+    const { validatedData } = req;
     const { id } = req.params;
     const updatedProduct = await this.productModel.update({
       id,
-      input: result.data,
+      input: validatedData,
     });
+
+    if (!updatedProduct) {
+      handleProcessFailure(res, 404, "Product not found");
+      return;
+    }
 
     res.json(updatedProduct);
   };
@@ -60,9 +52,8 @@ class ProductController {
     const deletedProduct = await this.productModel.delete({ id });
 
     if (!deletedProduct) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
+      handleProcessFailure(res, 404, "Product not found");
+      return;
     }
 
     res
