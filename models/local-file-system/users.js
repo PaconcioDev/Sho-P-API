@@ -11,7 +11,6 @@ class UserModel {
     const users = await readFromLocalFile(usersFilePath);
     // eslint-disable-next-line no-unused-vars
     const usersWithoutPassword = users.map(({ password, ...user }) => user);
-
     return usersWithoutPassword;
   }
 
@@ -40,8 +39,8 @@ class UserModel {
 
     const users = await readFromLocalFile(usersFilePath);
     users.push(newUser);
-    await writeToLocalFile(usersFilePath, users);
 
+    await writeToLocalFile(usersFilePath, users);
     // eslint-disable-next-line no-unused-vars
     const { password, ...cleanedUser } = newUser;
     return cleanedUser;
@@ -90,6 +89,7 @@ class UserModel {
 
     if (phone && usersArr.some((user) => user.phone === phone)) return "phone";
     if (email && usersArr.some((user) => user.email === email)) return "email";
+    
     return null;
   }
 }

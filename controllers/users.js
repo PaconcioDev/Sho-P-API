@@ -1,5 +1,3 @@
-import { handleProcessFailure } from "../utils/handleProccessFailure.js";
-
 class UserController {
   constructor({ userModel }) {
     this.userModel = userModel;
@@ -14,10 +12,7 @@ class UserController {
     const { id } = req.params;
     const user = await this.userModel.findOne({ id });
 
-    if (!user) {
-      handleProcessFailure(res, 404, "User not found");
-      return;
-    }
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     res.json(user);
   };
@@ -26,13 +21,9 @@ class UserController {
     const { validatedData } = req;
 
     const newUser = await this.userModel.create({ input: validatedData });
-    if (newUser === "phone") {
-      handleProcessFailure(res, 422, "User already registered");
-      return;
-    } else if (newUser === "email") {
-      handleProcessFailure(res, 422, "User already registered");
-      return;
-    }
+
+    if (newUser === "phone" || newUser === "email")
+      return res.status(422).json({ error: "User already registered" });
 
     res.status(201).json(newUser);
   };
@@ -45,18 +36,10 @@ class UserController {
       input: validatedData,
     });
 
-    if (!updatedUser) {
-      handleProcessFailure(res, 404, "User not found");
-      return;
-    }
+    if (!updatedUser) return res.status(404).json({ error: "User not found" });
 
-    if (updatedUser === "phone") {
-      handleProcessFailure(res, 422, "User already registered");
-      return;
-    } else if (updatedUser === "email") {
-      handleProcessFailure(res, 422, "User already registered");
-      return;
-    }
+    if (updatedUser === "phone" || updatedUser === "email")
+      return res.status(422).json({ error: "User already registered" });
 
     res.status(200).json(updatedUser);
   };
@@ -65,10 +48,7 @@ class UserController {
     const { id } = req.params;
     const deletedUser = await this.userModel.delete({ id });
 
-    if (!deletedUser) {
-      handleProcessFailure(res, 404, "User not found");
-      return;
-    }
+    if (!deletedUser) return res.status(404).json({ error: "User not found" });
 
     res.status(200).json({ message: "User successfully deleted" });
   };

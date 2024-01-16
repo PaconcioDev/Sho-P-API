@@ -51,7 +51,6 @@ class AuthModel {
     };
 
     await writeToLocalFile(usersFilePath, users);
-
     return true;
   }
 

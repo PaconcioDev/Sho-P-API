@@ -1,5 +1,3 @@
-import { handleProcessFailure } from "../utils/handleProccessFailure.js";
-
 class AuthController {
   constructor({ authModel }) {
     this.authModel = authModel;
@@ -8,10 +6,9 @@ class AuthController {
   login = async (req, res) => {
     const { validatedData } = req;
     const user = await this.authModel.login({ input: validatedData });
-    if (!user) {
-      handleProcessFailure(res, 401, "Invalid user or password");
-      return;
-    }
+
+    if (!user)
+      return res.status(401).json({ error: "Invalid user or password" });
 
     return res.send({
       name: user.user.name,
@@ -27,10 +24,8 @@ class AuthController {
       newPassword: validatedData,
       id,
     });
-    if (!rta) {
-      handleProcessFailure(res, 400, "Process failed");
-      return;
-    }
+
+    if (!rta) return res.status(400).json({ error: "Process failed" });
 
     res.status(200).json({ message: "Password updated successfully" });
   };
@@ -38,10 +33,8 @@ class AuthController {
   recoverPassword = async (req, res) => {
     const { validatedData } = req;
     const rta = await this.authModel.recoverPassword({ email: validatedData });
-    if (!rta) {
-      handleProcessFailure(res, 400, "Process failed");
-      return;
-    }
+
+    if (!rta) return res.status(400).json({ error: "Process failed" });
 
     res.status(200).json({ message: "Email sent" });
   };

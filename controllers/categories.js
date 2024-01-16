@@ -1,5 +1,3 @@
-import { handleProcessFailure } from "../utils/handleProccessFailure.js";
-
 class CategoryController {
   constructor({ categoryModel }) {
     this.categoryModel = categoryModel;
@@ -14,10 +12,7 @@ class CategoryController {
     const { id } = req.params;
     const category = await this.categoryModel.findOne({ id });
 
-    if (!category) {
-      handleProcessFailure(res, 404, "Category not found");
-      return;
-    }
+    if (!category) return res.status(404).json({ error: "Category not found" });
 
     res.json(category);
   };
@@ -26,10 +21,8 @@ class CategoryController {
     const { id } = req.params;
     const filteredProducts = await this.categoryModel.findProducts({ id });
 
-    if (!filteredProducts) {
-      handleProcessFailure(res, 404, "No products on this category");
-      return;
-    }
+    if (!filteredProducts)
+      return res.status(404).json({ error: "No products on this category" });
 
     res.json(filteredProducts);
   };
@@ -39,7 +32,6 @@ class CategoryController {
     const newCategory = await this.categoryModel.create({
       input: validatedData,
     });
-
     res.status(201).json(newCategory);
   };
 
@@ -51,10 +43,8 @@ class CategoryController {
       input: validatedData,
     });
 
-    if (!updatedCategory) {
-      handleProcessFailure(res, 404, "Category not found");
-      return;
-    }
+    if (!updatedCategory)
+      return res.status(404).json({ error: "Category not found" });
 
     res.json(updatedCategory);
   };
@@ -63,10 +53,8 @@ class CategoryController {
     const { id } = req.params;
     const deletedCategory = await this.categoryModel.delete({ id });
 
-    if (!deletedCategory) {
-      handleProcessFailure(res, 404, "Category not found");
-      return;
-    }
+    if (!deletedCategory)
+      return res.status(404).json({ error: "Category not found" });
 
     res
       .status(200)

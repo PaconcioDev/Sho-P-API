@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controllers/users.js";
-import { checkLogin, isTheSameUser } from "../middlewares/auth.js";
+import { checkLogin } from "../middlewares/auth.js";
 import { handleValidationError } from "../middlewares/validation.js";
 import { updateUserSchema, userSchema } from "../schemas/users.js";
 
@@ -21,10 +21,9 @@ const createUserRouter = ({ userModel }) => {
     "/:id",
     checkLogin,
     handleValidationError(updateUserSchema, "body", true),
-    isTheSameUser,
     userController.update
   );
-  usersRouter.delete("/:id", checkLogin, isTheSameUser, userController.delete);
+  usersRouter.delete("/:id", checkLogin, userController.delete);
 
   return usersRouter;
 };

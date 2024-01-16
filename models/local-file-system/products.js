@@ -38,6 +38,7 @@ class ProductModel {
     if (productIndex === -1) return false;
 
     const categories = await readFromLocalFile(categoriesFilePath);
+    
     products[productIndex] = {
       ...products[productIndex],
       ...cleanedInput,

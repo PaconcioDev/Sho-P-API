@@ -1,9 +1,6 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.js";
-import {
-  checkLogin,
-  // isTheSameUser
-} from "../middlewares/auth.js";
+import { checkLogin } from "../middlewares/auth.js";
 import { handleValidationError } from "../middlewares/validation.js";
 import {
   loginSchema,
@@ -21,10 +18,9 @@ const createAuthRouter = ({ authModel }) => {
     authController.login
   );
   authRouter.post(
-    "/change-password",
+    "/change-password/:id",
     checkLogin,
     handleValidationError(updatePasswordSchema, "body"),
-    // isTheSameUser
     authController.changePassword
   );
   authRouter.post(

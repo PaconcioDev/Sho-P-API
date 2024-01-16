@@ -17,6 +17,7 @@ class CategoryModel {
 
   static async findProducts({ id }) {
     const products = await readFromLocalFile(productsFilePath);
+    
     return products
       .filter((product) => product.category.id.toString() === id)
       .map((product) => {

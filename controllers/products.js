@@ -1,5 +1,3 @@
-import { handleProcessFailure } from "../utils/handleProccessFailure.js";
-
 class ProductController {
   constructor({ productModel }) {
     this.productModel = productModel;
@@ -7,7 +5,6 @@ class ProductController {
 
   getAll = async (req, res) => {
     const findProducts = await this.productModel.getAll();
-
     res.json(findProducts);
   };
 
@@ -15,19 +12,14 @@ class ProductController {
     const { id } = req.params;
     const product = await this.productModel.findOne({ id });
 
-    if (!product) {
-      handleProcessFailure(res, 404, "Product not found");
-      return;
-    }
+    if (!product) return res.status(404).json({ error: "Product not found" });
 
     res.json(product);
   };
 
   create = async (req, res) => {
     const { validatedData } = req;
-
     const newProduct = await this.productModel.create({ input: validatedData });
-
     res.status(201).json(newProduct);
   };
 
@@ -39,10 +31,8 @@ class ProductController {
       input: validatedData,
     });
 
-    if (!updatedProduct) {
-      handleProcessFailure(res, 404, "Product not found");
-      return;
-    }
+    if (!updatedProduct)
+      return res.status(404).json({ error: "Product not found" });
 
     res.json(updatedProduct);
   };
@@ -51,10 +41,8 @@ class ProductController {
     const { id } = req.params;
     const deletedProduct = await this.productModel.delete({ id });
 
-    if (!deletedProduct) {
-      handleProcessFailure(res, 404, "Product not found");
-      return;
-    }
+    if (!deletedProduct)
+      return res.status(404).json({ error: "Product not found" });
 
     res
       .status(200)
