@@ -1,7 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { completeCategory, updateCategory } from "../../utils/category.js";
-import { readFromLocalFile, writeToLocalFile} from "../../utils/readAndWriteLocal.js";
 import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
+import {
+  readFromLocalFile,
+  writeToLocalFile,
+} from "../../utils/readAndWriteLocal.js";
 
 class ProductModel {
   static async getAll() {
@@ -31,14 +34,14 @@ class ProductModel {
   }
 
   static async update({ id, input }) {
-    const products = await readFromLocalFile(productsFilePath);
     const { category_id, ...cleanedInput } = input;
+    const products = await readFromLocalFile(productsFilePath);
     const productIndex = products.findIndex((product) => product.id === id);
 
     if (productIndex === -1) return false;
 
     const categories = await readFromLocalFile(categoriesFilePath);
-    
+
     products[productIndex] = {
       ...products[productIndex],
       ...cleanedInput,

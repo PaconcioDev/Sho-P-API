@@ -23,6 +23,7 @@ const createUserRouter = ({ userModel }) => {
     handleValidationError(updateUserSchema, "body", true),
     userController.update
   );
+  
   usersRouter.delete("/:id", checkLogin, userController.delete);
 
   return usersRouter;

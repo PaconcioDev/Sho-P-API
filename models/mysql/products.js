@@ -67,7 +67,7 @@ class ProductModel {
         [name, description, price, image, category_id]
       );
     } catch (e) {
-      throw new Error("Error creating movie");
+      throw new Error("Error creating product");
     }
 
     const [products] = await connection.query(
@@ -101,7 +101,7 @@ class ProductModel {
         [input, id]
       );
     } catch (e) {
-      throw new Error("Error updating the movie");
+      throw new Error("Error updating the product");
     }
 
     return this.findOne({ id });

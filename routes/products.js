@@ -24,6 +24,7 @@ const createProductRouter = ({ productModel }) => {
     handleValidationError(productSchema, "body", true),
     productController.update
   );
+  
   productsRouter.delete("/:id", checkAdminRole, productController.delete);
 
   return productsRouter;

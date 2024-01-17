@@ -32,6 +32,7 @@ class CategoryController {
     const newCategory = await this.categoryModel.create({
       input: validatedData,
     });
+    
     res.status(201).json(newCategory);
   };
 

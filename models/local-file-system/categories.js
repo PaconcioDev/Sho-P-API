@@ -1,8 +1,8 @@
+import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
 import {
   readFromLocalFile,
   writeToLocalFile,
 } from "../../utils/readAndWriteLocal.js";
-import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
 
 class CategoryModel {
   static async getAll() {
@@ -17,7 +17,7 @@ class CategoryModel {
 
   static async findProducts({ id }) {
     const products = await readFromLocalFile(productsFilePath);
-    
+
     return products
       .filter((product) => product.category.id.toString() === id)
       .map((product) => {
@@ -46,6 +46,7 @@ class CategoryModel {
 
   static async update({ id, input }) {
     const categories = await readFromLocalFile(categoriesFilePath);
+
     const categoryIndex = categories.findIndex(
       (category) => category.id === parseInt(id)
     );
@@ -62,6 +63,7 @@ class CategoryModel {
   }
   static async delete({ id }) {
     const categories = await readFromLocalFile(categoriesFilePath);
+
     const categoryIndex = categories.findIndex(
       (category) => category.id === parseInt(id)
     );

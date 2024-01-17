@@ -20,6 +20,7 @@ class AuthController {
   changePassword = async (req, res) => {
     const { id } = req.token;
     const { validatedData } = req;
+    
     const rta = await this.authModel.changePassword({
       newPassword: validatedData,
       id,

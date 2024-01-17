@@ -25,6 +25,7 @@ const createCategoryRouter = ({ categoryModel }) => {
     handleValidationError(categorySchema, "body"),
     categoryController.update
   );
+  
   categoriesRouter.delete("/:id", checkAdminRole, categoryController.delete);
 
   return categoriesRouter;

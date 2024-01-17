@@ -31,6 +31,7 @@ class UserController {
   update = async (req, res) => {
     const { validatedData } = req;
     const { id } = req.params;
+    
     const updatedUser = await this.userModel.update({
       id,
       input: validatedData,

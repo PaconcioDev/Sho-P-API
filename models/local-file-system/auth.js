@@ -2,12 +2,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import { config } from "../../config/config.js";
+import { encryptPassword } from "../../utils/encryptPassoword.js";
+import { usersFilePath } from "../../utils/filePath.js";
 import {
   readFromLocalFile,
   writeToLocalFile,
 } from "../../utils/readAndWriteLocal.js";
-import { usersFilePath } from "../../utils/filePath.js";
-import { encryptPassword } from "../../utils/encryptPassoword.js";
 
 class AuthModel {
   static async login({ input }) {
@@ -15,6 +15,7 @@ class AuthModel {
     const { email, password } = input;
 
     const user = users.find((user) => user.email === email);
+
     const isPasswordCorrect = !user
       ? false
       : await bcrypt.compare(password, user.password);
@@ -60,12 +61,14 @@ class AuthModel {
 
     if (!user) return false;
 
-    const payload = {sub: user.id}; 
+    const payload = { sub: user.id };
+
     const token = jwt.sign(payload, config.jwtSecret, {
       expiresIn: "10min",
     });
 
     const link = `https://sho-p.com/recovery?token=${token}`;
+
     const mail = {
       from: `${config.mailAddress}`,
       to: `${user.email}`,

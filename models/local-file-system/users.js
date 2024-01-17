@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { encryptPassword } from "../../utils/encryptPassoword.js";
+import { usersFilePath } from "../../utils/filePath.js";
 import {
   readFromLocalFile,
   writeToLocalFile,
 } from "../../utils/readAndWriteLocal.js";
-import { usersFilePath } from "../../utils/filePath.js";
 
 class UserModel {
   static async getAll() {
