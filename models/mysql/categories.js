@@ -25,19 +25,12 @@ class CategoryModel {
   }
 
   static async findOne({ id }) {
-    const [categories] = await connection.query(
-      `
-      SELECT * 
-      FROM category
-      WHERE id = ?
-      ;
-      `,
-      [id]
+    const categories = await this.getAll();
+    const category = categories.find(
+      (category) => category.id === parseInt(id)
     );
 
-    if (categories.length === 0) return false;
-
-    return categories[0];
+    return category;
   }
 
   static async findProducts({ id }) {

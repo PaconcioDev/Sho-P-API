@@ -31,27 +31,10 @@ class ProductModel {
   }
 
   static async findOne({ id }) {
-    const [products] = await connection.query(
-      `
-      SELECT 
-        BIN_TO_UUID(p.id) AS id, 
-        p.name, 
-        p.description, 
-        p.price, 
-        p.image,
-        JSON_OBJECT("id", c.id, "name", c.name) AS category
-      FROM product AS p
-      INNER JOIN category AS c
-      ON p.category_id = c.id
-      WHERE p.id = UUID_TO_BIN(?)
-      ;
-      `,
-      [id]
-    );
+    const products = await this.getAll();
+    const product = products.find((product) => product.id === id);
 
-    if (products.length === 0) return false;
-
-    return products[0];
+    return product;
   }
 
   static async create({ input }) {
@@ -70,24 +53,8 @@ class ProductModel {
       throw new Error("Error creating product");
     }
 
-    const [products] = await connection.query(
-      `
-      SELECT 
-        BIN_TO_UUID(p.id) AS id, 
-        p.name, 
-        p.description, 
-        p.price, 
-        p.image,
-        JSON_OBJECT("id", c.id, "name", c.name) AS category
-      FROM product AS p
-      INNER JOIN category AS c
-      ON p.category_id = c.id
-      WHERE p.id = UUID_TO_BIN("${uuid}")
-      ;
-      `
-    );
-
-    return products[0];
+    const product = await this.findOne({ id: uuid });
+    return product;
   }
 
   static async update({ id, input }) {

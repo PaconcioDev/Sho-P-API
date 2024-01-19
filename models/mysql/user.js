@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
 import { config } from "../../config/config.js";
+import { encryptPassword } from "../../utils/encryptPassoword.js";
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
@@ -33,12 +34,12 @@ class UserModel {
     return user;
   }
 
-
-  //TODO: HASH PASSWORD
   static async create({ input }) {
     const [uuidResult] = await connection.query("SELECT UUID() uuid;");
     const [{ uuid }] = uuidResult;
-    
+
+    const hash = await encryptPassword({ password: input.password });
+
     try {
       let query;
       let queryParams;
@@ -48,13 +49,19 @@ class UserModel {
           INSERT INTO user (id, name, last_name, email, password, phone)
           VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?);
         `;
-        queryParams = [input.name, input.lastName, input.email, input.password, input.phone];
+        queryParams = [
+          input.name,
+          input.lastName,
+          input.email,
+          hash,
+          input.phone,
+        ];
       } else {
         query = `
           INSERT INTO user (id, name, last_name, email, password)
           VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?);
         `;
-        queryParams = [input.name, input.lastName, input.password, input.email];
+        queryParams = [input.name, input.lastName, input.email, hash];
       }
 
       await connection.query(query, queryParams);
