@@ -1,5 +1,5 @@
+import bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
-import { encryptPassword } from "../../utils/encryptPassoword.js";
 import { usersFilePath } from "../../utils/filePath.js";
 import {
   readFromLocalFile,
@@ -28,7 +28,7 @@ class UserModel {
     if (isDuplicate === "phone") return "phone";
     if (isDuplicate === "email") return "email";
 
-    const hash = await encryptPassword({ password: input.password });
+    const hash = await bcrypt.hash(input.password, 10);
 
     const newUser = {
       id: randomUUID(),
@@ -90,7 +90,7 @@ class UserModel {
 
     if (phone && usersArr.some((user) => user.phone === phone)) return "phone";
     if (email && usersArr.some((user) => user.email === email)) return "email";
-    
+
     return null;
   }
 }

@@ -1,7 +1,7 @@
 import mysql from "mysql2/promise";
+import bcrypt from "bcrypt";
 import snakeCaseKeys from "snakecase-keys";
 import { config } from "../../config/config.js";
-import { encryptPassword } from "../../utils/encryptPassoword.js";
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
@@ -29,10 +29,23 @@ class UserModel {
     return users;
   }
   static async findOne({ id }) {
-    const users = await this.getAll();
-    const user = users.find((user) => user.id === id);
+    const [user] = await connection.query(
+      `
+      SELECT
+        BIN_TO_UUID(u.id) AS id, 
+        u.role,
+        u.name,
+        u.last_name,
+        u.email,
+        u.phone
+      FROM user as u
+      WHERE id = UUID_TO_BIN(?)
+      LIMIT 1;
+      `,
+      [id]
+    );
 
-    return user;
+    return user[0];
   }
 
   static async create({ input }) {
@@ -47,8 +60,8 @@ class UserModel {
     const [uuidResult] = await connection.query("SELECT UUID() uuid;");
     const [{ uuid }] = uuidResult;
 
-    const hash = await encryptPassword({ password: input.password });
-
+    const hash = await bcrypt.hash(input.password, 10);
+    
     try {
       let query;
       let queryParams;
@@ -83,8 +96,6 @@ class UserModel {
   }
 
   static async update({ id, input }) {
-    await this.findOne({ id });
-
     if (input.phone || input.email) {
       const isDuplicate = await this.isDuplicatePhoneOrEmail({
         phone: input.phone,
@@ -114,15 +125,17 @@ class UserModel {
   }
 
   static async delete({ id }) {
-    await this.findOne({ id });
+    try {
+      const [users] = await connection.query(
+        `DELETE FROM user
+        WHERE id = UUID_TO_BIN(?)`,
+        [id]
+      );
 
-    const [users] = await connection.query(
-      `DELETE FROM user
-      WHERE id = UUID_TO_BIN(?)`,
-      [id]
-    );
-
-    return users.affectedRows > 0;
+      return users.affectedRows > 0;
+    } catch (error) {
+      throw new Error("Error deleting user");
+    }
   }
 
   static async isDuplicatePhoneOrEmail({ phone, email }) {

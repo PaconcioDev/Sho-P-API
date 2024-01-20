@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { config } from "../../config/config.js";
-import { encryptPassword } from "../../utils/encryptPassoword.js";
 import { usersFilePath } from "../../utils/filePath.js";
 import {
   readFromLocalFile,
@@ -40,7 +39,7 @@ class AuthModel {
 
   static async changePassword({ newPassword, id }) {
     const users = await readFromLocalFile(usersFilePath);
-    const hash = await encryptPassword(newPassword);
+    const hash = await bcrypt.hash(newPassword, 10);
 
     const userIndex = users.findIndex((user) => user.id === id);
 

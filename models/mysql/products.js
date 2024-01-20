@@ -31,10 +31,25 @@ class ProductModel {
   }
 
   static async findOne({ id }) {
-    const products = await this.getAll();
-    const product = products.find((product) => product.id === id);
+    const [product] = await connection.query(
+      `
+      SELECT 
+        BIN_TO_UUID(p.id) AS id, 
+        p.name, 
+        p.description, 
+        p.price, 
+        p.image,
+        JSON_OBJECT("id", c.id, "name", c.name) AS category
+      FROM product AS p
+      INNER JOIN category AS c
+      ON p.category_id = c.id
+      WHERE p.id = UUID_TO_BIN(?)
+      LIMIT 1;
+      `,
+      [id]
+    );
 
-    return product;
+    return product[0];
   }
 
   static async create({ input }) {
@@ -58,8 +73,6 @@ class ProductModel {
   }
 
   static async update({ id, input }) {
-    this.findOne({ id });
-
     try {
       await connection.query(
         `
@@ -78,15 +91,16 @@ class ProductModel {
   }
 
   static async delete({ id }) {
-    this.findOne({ id });
-
-    const [products] = await connection.query(
-      `DELETE FROM product
-      WHERE id = UUID_TO_BIN(?);`,
-      [id]
-    );
-
-    return products.affectedRows > 0;
+    try {
+      const [products] = await connection.query(
+        `DELETE FROM product
+        WHERE id = UUID_TO_BIN(?);`,
+        [id]
+      );
+      return products.affectedRows > 0;
+    } catch (error) {
+      throw new Error("Error deleting the product");
+    }
   }
 }
 

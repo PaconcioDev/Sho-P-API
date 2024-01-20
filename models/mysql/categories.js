@@ -25,12 +25,17 @@ class CategoryModel {
   }
 
   static async findOne({ id }) {
-    const categories = await this.getAll();
-    const category = categories.find(
-      (category) => category.id.toString() === id
+    const [category] = await connection.query(
+      `
+      SELECT * 
+      FROM category
+      WHERE id = ?
+      LIMIT 1;
+      `,
+      [id]
     );
-
-    return category;
+  
+    return category[0]; 
   }
 
   static async findProducts({ id }) {
@@ -76,8 +81,6 @@ class CategoryModel {
   }
 
   static async update({ id, input }) {
-    this.findOne({ id });
-
     try {
       await connection.query(
         `
@@ -96,18 +99,20 @@ class CategoryModel {
   }
 
   static async delete({ id }) {
-    this.findOne({ id });
+    try {
+      const [categories] = await connection.query(
+        `
+        DELETE FROM category
+        WHERE id = ?
+        ;
+        `,
+        [id]
+      );
 
-    const [products] = await connection.query(
-      `
-      DELETE FROM category
-      WHERE id = ?
-      ;
-      `,
-      [id]
-    );
-
-    return products.affectedRows > 0;
+      return categories.affectedRows > 0;
+    } catch (error) {
+      throw new Error("Error deleting category");
+    }
   }
 }
 
