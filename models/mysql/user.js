@@ -1,4 +1,5 @@
 import mysql from "mysql2/promise";
+import snakeCaseKeys from "snakecase-keys";
 import { config } from "../../config/config.js";
 import { encryptPassword } from "../../utils/encryptPassoword.js";
 
@@ -35,6 +36,14 @@ class UserModel {
   }
 
   static async create({ input }) {
+    const isDuplicate = await this.isDuplicatePhoneOrEmail({
+      phone: input.phone,
+      email: input.email,
+    });
+
+    if (isDuplicate === "phone") return "phone";
+    if (isDuplicate === "email") return "email";
+
     const [uuidResult] = await connection.query("SELECT UUID() uuid;");
     const [{ uuid }] = uuidResult;
 
@@ -73,9 +82,57 @@ class UserModel {
     return user;
   }
 
-  //TODO:
-  //static async update({ id, input }) {}
-  //static async delete({ id }) {}
+  static async update({ id, input }) {
+    await this.findOne({ id });
+
+    if (input.phone || input.email) {
+      const isDuplicate = await this.isDuplicatePhoneOrEmail({
+        phone: input.phone,
+        email: input.email,
+      });
+
+      if (isDuplicate === "phone") return "phone";
+      if (isDuplicate === "email") return "email";
+    }
+
+    try {
+      const snakeCaseInput = snakeCaseKeys(input);
+      await connection.query(
+        `
+        UPDATE user
+        SET ?
+        WHERE id = UUID_TO_BIN(?)
+        ;
+        `,
+        [snakeCaseInput, id]
+      );
+    } catch (e) {
+      throw new Error("Error updating user");
+    }
+
+    return await this.findOne({ id });
+  }
+
+  static async delete({ id }) {
+    await this.findOne({ id });
+
+    const [users] = await connection.query(
+      `DELETE FROM user
+      WHERE id = UUID_TO_BIN(?)`,
+      [id]
+    );
+
+    return users.affectedRows > 0;
+  }
+
+  static async isDuplicatePhoneOrEmail({ phone, email }) {
+    const usersArr = await this.getAll();
+
+    if (phone && usersArr.some((user) => user.phone === phone)) return "phone";
+    if (email && usersArr.some((user) => user.email === email)) return "email";
+
+    return null;
+  }
 }
 
 export { UserModel };

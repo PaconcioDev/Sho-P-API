@@ -27,7 +27,7 @@ class CategoryModel {
   static async findOne({ id }) {
     const categories = await this.getAll();
     const category = categories.find(
-      (category) => category.id === parseInt(id)
+      (category) => category.id.toString() === id
     );
 
     return category;

@@ -15,7 +15,7 @@ class UserModel {
   }
 
   static async findOne({ id }) {
-    const users = await readFromLocalFile(usersFilePath);
+    const users = await this.getAll();
     return users.find((user) => user.id === id);
   }
 
@@ -35,6 +35,7 @@ class UserModel {
       role: "customer",
       ...input,
       password: hash,
+      phone: !input.phone ? "" : input.phone,
     };
 
     const users = await readFromLocalFile(usersFilePath);

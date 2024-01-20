@@ -1,5 +1,5 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { config } from "../../config/config.js";
 import { encryptPassword } from "../../utils/encryptPassoword.js";

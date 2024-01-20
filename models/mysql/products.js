@@ -62,9 +62,12 @@ class ProductModel {
 
     try {
       await connection.query(
-        `UPDATE product
+        `
+        UPDATE product
         SET ?
-        WHERE id = UUID_TO_BIN(?);`,
+        WHERE id = UUID_TO_BIN(?)
+        ;
+        `,
         [input, id]
       );
     } catch (e) {
