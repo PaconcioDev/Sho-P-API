@@ -1,12 +1,17 @@
 import z from "zod";
 
-const passwordRegex = new RegExp("^(?=.*[0-9])(?=.*[A-Z]).*$");
+const passwordRegex = new RegExp("^(?=.*[0-9])(?=.*[A-Z]).{8,}$");
 const phoneRegex = new RegExp("^\\d{10}$");
 
 // const role = z.enum(["customer", "admin", "superadmin"]);
 const name = z.string().min(3);
 const email = z.string().email();
-const password = z.string().regex(passwordRegex, "Must be a valid password");
+const password = z
+  .string()
+  .regex(
+    passwordRegex,
+    "Password must contain at least 8 characters, 1 uppercase letter and 1 number"
+  );
 const phone = z.string().regex(phoneRegex, "Must be a valid phone number");
 
 const userSchema = z.object({
@@ -25,8 +30,8 @@ const updateUserSchema = z.object({
 });
 
 const loginSchema = z.object({
-  email: email,
-  password: password,
+  email: z.string(),
+  password: z.string(),
 });
 
 const updatePasswordSchema = z.object({

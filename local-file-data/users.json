@@ -52,5 +52,14 @@
     "email": "nicolspp15@gmail.com",
     "password": "$2b$10$h6GfER1CnOzlw.k7dLeux.w9wJpLRYlOzkruVVC.w2WbTbikm9Bv2",
     "phone": "3416756765"
+  },
+  {
+    "id": "3bfa7fdf-2909-4e1d-9fc4-57c1d45cc07d",
+    "role": "customer",
+    "name": "Sebastián",
+    "lastName": "Rodri",
+    "email": "e@mail.com",
+    "password": "$2b$10$zw6tMTfqoG4KK55mDZhB.uvTYQjIwNdtH3.syW4qKm8cKbS9ZBOw.",
+    "phone": "3219955652"
   }
 ]
