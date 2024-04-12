@@ -17,6 +17,17 @@ const verifyToken = (authorization) => {
   return { token, decodedToken };
 };
 
+function returnDecodedToken(req, res, next) {
+  const { token, decodedToken } = verifyToken(req.get("authorization"));
+
+  if (!token || !decodedToken.sub)
+    return res.status(401).json({ error: "Invalid or missing token" });
+
+  req.token = decodedToken;
+  
+  next();
+}
+
 function checkAdminRole(req, res, next) {
   const { token, decodedToken } = verifyToken(req.get("authorization"));
 
@@ -44,4 +55,4 @@ function checkLogin(req, res, next) {
   next();
 }
 
-export { checkAdminRole, checkLogin };
+export { returnDecodedToken, checkAdminRole, checkLogin };

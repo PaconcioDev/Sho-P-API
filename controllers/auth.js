@@ -19,10 +19,10 @@ class AuthController {
 
   changePassword = async (req, res) => {
     const { id } = req.token;
-    const { validatedData } = req;
+    const { password } = req.validatedData;
     
     const rta = await this.authModel.changePassword({
-      newPassword: validatedData,
+      newPassword: password,
       id,
     });
 
@@ -31,13 +31,27 @@ class AuthController {
     res.status(200).json({ message: "Password updated successfully" });
   };
 
-  recoverPassword = async (req, res) => {
+  sendPasswordEmail = async (req, res) => {
     const { validatedData } = req;
-    const rta = await this.authModel.recoverPassword({ email: validatedData });
+    const rta = await this.authModel.sendPasswordEmail({ email: validatedData });
 
     if (!rta) return res.status(400).json({ error: "Process failed" });
 
     res.status(200).json({ message: "Email sent" });
+  };
+
+  recoverPassword = async (req, res) => {
+    const { sub } = req.token;
+    const { password } = req.validatedData;
+    
+    const rta = await this.authModel.changePassword({
+      newPassword: password,
+      id: sub,
+    });
+
+    if (!rta) return res.status(400).json({ error: "Process failed" });
+
+    res.status(200).json({ message: "Password updated successfully" });
   };
 }
 

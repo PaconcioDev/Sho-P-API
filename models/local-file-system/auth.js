@@ -7,6 +7,7 @@ import {
   readFromLocalFile,
   writeToLocalFile,
 } from "../../utils/readAndWriteLocal.js";
+import { mailContent } from "../../utils/mailContent.js";
 
 class AuthModel {
   static async login({ input }) {
@@ -54,7 +55,7 @@ class AuthModel {
     return true;
   }
 
-  static async recoverPassword({ email }) {
+  static async sendPasswordEmail({ email }) {
     const users = await readFromLocalFile(usersFilePath);
     const user = users.find((user) => user.email === email.email);
 
@@ -62,17 +63,19 @@ class AuthModel {
 
     const payload = { sub: user.id };
 
+    // TODO: Test the expiration
     const token = jwt.sign(payload, config.jwtSecret, {
-      expiresIn: "10min",
+      expiresIn: "5min",
     });
 
-    const link = `https://sho-p.com/recovery?token=${token}`;
+    const link = `http://localhost:5173/account/recovery/${token}`;
+    const html = mailContent(link);
 
     const mail = {
       from: `${config.mailAddress}`,
       to: `${user.email}`,
       subject: "Sho-P password recovery",
-      html: `<b>Enter this link to recover your password: ${link}</b>`,
+      html: html,
     };
 
     const rta = await this.sendMail(mail);

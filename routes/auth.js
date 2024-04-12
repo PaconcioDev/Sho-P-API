@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/auth.js";
-import { checkLogin } from "../middlewares/auth.js";
+import { checkLogin, returnDecodedToken } from "../middlewares/auth.js";
 import { handleValidationError } from "../middlewares/validation.js";
 import {
   loginSchema,
@@ -26,6 +26,12 @@ const createAuthRouter = ({ authModel }) => {
   authRouter.post(
     "/recovery",
     handleValidationError(sendEmailSchema, "body"),
+    authController.sendPasswordEmail
+  );
+  authRouter.post(
+    "/recover-password",
+    returnDecodedToken,
+    handleValidationError(updatePasswordSchema, "body"),
     authController.recoverPassword
   );
 

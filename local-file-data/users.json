@@ -59,7 +59,16 @@
     "name": "Sebastián",
     "lastName": "Rodri",
     "email": "e@mail.com",
-    "password": "$2b$10$zw6tMTfqoG4KK55mDZhB.uvTYQjIwNdtH3.syW4qKm8cKbS9ZBOw.",
+    "password": "$2b$10$h1bPcmONM8x5G4n8H9zCDOg02NtdXx1PPDkp4IfMBUJan8EQO5fE.",
     "phone": "3219955652"
+  },
+  {
+    "id": "c99bc694-7abc-427e-8129-d946002f7fa6",
+    "role": "customer",
+    "name": "Francisco",
+    "lastName": "Gómez",
+    "email": "paconcio3@gmail.com",
+    "password": "$2b$10$MoSkjG1KwY.o0O7rSh1bWumdWgMzX89hpWFxlYthja56aLh3vxaaK",
+    "phone": "3219955655"
   }
 ]
