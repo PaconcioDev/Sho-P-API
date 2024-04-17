@@ -3,6 +3,7 @@ import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { config } from "../../config/config.js";
+import { mailContent } from "../../utils/mailContent.js";
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
@@ -88,7 +89,7 @@ class AuthModel {
     return user;
   }
 
-  static async recoverPassword({ email }) {
+  static async sendPasswordEmail({ email }) {
     const [user] = await connection.query(
       `
       SELECT 
@@ -109,16 +110,17 @@ class AuthModel {
     const payload = { sub: userId };
 
     const token = jwt.sign(payload, config.jwtSecret, {
-      expiresIn: "10min",
+      expiresIn: "5min",
     });
 
-    const link = `https://sho-p.com/recovery?token=${token}`;
+    const link = `https://localhost:5173/account/recovery/${token}`;
+    const html = mailContent(link);
 
     const mail = {
       from: `${config.mailAddress}`,
       to: `${userEmail}`,
       subject: "Sho-P password recovery",
-      html: `<b>Enter this link to recover your password: ${link}</b>`,
+      html: html,
     };
 
     const rta = await this.sendMail(mail);

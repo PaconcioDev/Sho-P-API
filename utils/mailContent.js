@@ -109,7 +109,7 @@ function mailContent (link) {
     <tr>
     <td class="pad">
     <div style="color:#636363;direction:ltr;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-    <p style="margin: 0;">Click on the button below to recover your password at <strong><span style="color: #ed7d31;">Sho-P</span></strong>. If you didn't request this email you can delete it.</p>
+    <p style="margin: 0;">Click on the button below to recover your password at <strong><span style="color: #ed7d31;">Sho-P</span></strong>. If you didn't request this email you can delete it. You got 5 minutes until the link expires.</p>
     </div>
     </td>
     </tr>

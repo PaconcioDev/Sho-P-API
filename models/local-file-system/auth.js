@@ -63,7 +63,6 @@ class AuthModel {
 
     const payload = { sub: user.id };
 
-    // TODO: Test the expiration
     const token = jwt.sign(payload, config.jwtSecret, {
       expiresIn: "5min",
     });
