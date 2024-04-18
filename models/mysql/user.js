@@ -1,6 +1,7 @@
 import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
 import snakeCaseKeys from "snakecase-keys";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 import { config } from "../../config/config.js";
 
 const connection = await mysql.createConnection({
@@ -57,6 +58,10 @@ class UserModel {
     if (isDuplicate === "phone") return "phone";
     if (isDuplicate === "email") return "email";
 
+    const formatName = capitalizeFirstLetter(input.name);
+    const formatLastName = capitalizeFirstLetter(input.lastName);
+    const formatEmail = input.email.toLowerCase();
+
     const [uuidResult] = await connection.query("SELECT UUID() uuid;");
     const [{ uuid }] = uuidResult;
 
@@ -72,9 +77,9 @@ class UserModel {
           VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?);
         `;
         queryParams = [
-          input.name,
-          input.lastName,
-          input.email,
+          formatName,
+          formatLastName,
+          formatEmail,
           hash,
           input.phone,
         ];
@@ -83,7 +88,7 @@ class UserModel {
           INSERT INTO user (id, name, last_name, email, password)
           VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?);
         `;
-        queryParams = [input.name, input.lastName, input.email, hash];
+        queryParams = [formatName, formatLastName, formatEmail, hash];
       }
 
       await connection.query(query, queryParams);

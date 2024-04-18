@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
 import { usersFilePath } from "../../utils/filePath.js";
 import {
   readFromLocalFile,
@@ -20,6 +21,7 @@ class UserModel {
   }
 
   static async create({ input }) {
+    console.log(input);
     const isDuplicate = await this.isDuplicatePhoneOrEmail({
       phone: input.phone,
       email: input.email,
@@ -30,10 +32,16 @@ class UserModel {
 
     const hash = await bcrypt.hash(input.password, 10);
 
+    const formatName = capitalizeFirstLetter(input.name);
+    const formatLastName = capitalizeFirstLetter(input.lastName);
+    const formatEmail = input.email.toLowerCase();
+
     const newUser = {
       id: randomUUID(),
       role: "customer",
-      ...input,
+      name: formatName,
+      lastName: formatLastName,
+      email: formatEmail,
       password: hash,
       phone: !input.phone ? "" : input.phone,
     };
