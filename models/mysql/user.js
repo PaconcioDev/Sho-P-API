@@ -60,7 +60,6 @@ class UserModel {
 
     const formatName = capitalizeFirstLetter(input.name);
     const formatLastName = capitalizeFirstLetter(input.lastName);
-    const formatEmail = input.email.toLowerCase();
 
     const [uuidResult] = await connection.query("SELECT UUID() uuid;");
     const [{ uuid }] = uuidResult;
@@ -79,7 +78,7 @@ class UserModel {
         queryParams = [
           formatName,
           formatLastName,
-          formatEmail,
+          input.email,
           hash,
           input.phone,
         ];
@@ -88,7 +87,7 @@ class UserModel {
           INSERT INTO user (id, name, last_name, email, password)
           VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?);
         `;
-        queryParams = [formatName, formatLastName, formatEmail, hash];
+        queryParams = [formatName, formatLastName, input.email, hash];
       }
 
       await connection.query(query, queryParams);
