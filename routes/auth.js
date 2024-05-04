@@ -4,8 +4,9 @@ import { checkLogin, returnDecodedToken } from "../middlewares/auth.js";
 import { handleValidationError } from "../middlewares/validation.js";
 import {
   loginSchema,
-  sendEmailSchema,
   updatePasswordSchema,
+  sendEmailSchema,
+  recoverPasswordSchema,
 } from "../schemas/users.js";
 
 const createAuthRouter = ({ authModel }) => {
@@ -31,7 +32,7 @@ const createAuthRouter = ({ authModel }) => {
   authRouter.post(
     "/recover-password",
     returnDecodedToken,
-    handleValidationError(updatePasswordSchema, "body"),
+    handleValidationError(recoverPasswordSchema, "body"),
     authController.recoverPassword
   );
 

@@ -17,17 +17,22 @@ class AuthController {
       token: user.token,
     });
   };
-
+  
   changePassword = async (req, res) => {
     const { id } = req.token;
-    const { password } = req.validatedData;
+    const { currentPassword, password } = req.validatedData;
     
     const rta = await this.authModel.changePassword({
+      currentPassword: currentPassword,
       newPassword: password,
       id,
     });
 
-    if (!rta) return res.status(400).json({ error: "Process failed" });
+    if (!rta) {
+      return res.status(400).json({ error: "Process failed" });
+    } else if (rta.message) {
+      return res.status(401).json({error: rta.message});
+    }
 
     res.status(200).json({ message: "Password updated successfully" });
   };
@@ -45,7 +50,7 @@ class AuthController {
     const { sub } = req.token;
     const { password } = req.validatedData;
     
-    const rta = await this.authModel.changePassword({
+    const rta = await this.authModel.recoverPassword({
       newPassword: password,
       id: sub,
     });

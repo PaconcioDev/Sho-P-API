@@ -53,7 +53,48 @@ class AuthModel {
     };
   }
 
-  static async changePassword({ newPassword, id }) {
+  static async changePassword({ currentPassword, newPassword, id }) {
+    const [user] = await connection.query(
+      `
+      SELECT
+        BIN_TO_UUID(u.id) as id,
+        u.role,
+        u.name,
+        u.last_name,
+        u.email,
+        u.password,
+        u.phone
+      FROM user AS u
+      WHERE id = UUID_TO_BIN(?)
+      `,
+      [id]
+    );
+    if (!user) return false;
+
+    const isCurrentPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+    if (!isCurrentPasswordCorrect) return {
+      message: "Wrong password"
+    };
+    
+    const hash = await bcrypt.hash(newPassword, 10);
+
+    try {
+      await connection.query(
+        `
+        UPDATE user
+        SET password = ?
+        WHERE id = UUID_TO_BIN(?)
+        `,
+        [hash, id]
+      );
+    } catch (error) {
+      throw new Error("Error changing password");
+    }
+
+    return user;
+  }
+
+  static async recoverPassword({ newPassword, id }) {
     const [user] = await connection.query(
       `
       SELECT

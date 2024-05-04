@@ -4,7 +4,8 @@ const passwordRegex = new RegExp("^(?=.*[0-9])(?=.*[A-Z]).{8,}$");
 const phoneRegex = new RegExp("^\\d{10}$");
 
 // const role = z.enum(["customer", "admin", "superadmin"]);
-const name = z.string().min(3, "Name must contain at least 3 characters");
+//TODO: REGEX ONLY LETTERS FOR Name and LastName
+const name = z.string().min(3, "First name must contain at least 3 characters");
 const lastName = z.string().min(3, "Last name must contain at least 3 characters");
 const email = z.string().email("Must be a valid email");
 const password = z
@@ -36,6 +37,11 @@ const loginSchema = z.object({
 });
 
 const updatePasswordSchema = z.object({
+  currentPassword: password,
+  password: password,
+});
+
+const recoverPasswordSchema = z.object({
   password: password,
 });
 
@@ -48,5 +54,6 @@ export {
   updateUserSchema,
   loginSchema,
   updatePasswordSchema,
+  recoverPasswordSchema,
   sendEmailSchema,
 };

@@ -38,7 +38,29 @@ class AuthModel {
     };
   }
 
-  static async changePassword({ newPassword, id }) {
+  static async changePassword({ currentPassword, newPassword, id }) {
+    const users = await readFromLocalFile(usersFilePath);
+    
+    const userIndex = users.findIndex((user) => user.id === id);
+    if (!userIndex) return false;
+    
+    const isCurrentPasswordCorrect = await bcrypt.compare(currentPassword, users[userIndex].password);
+    if (!isCurrentPasswordCorrect) return {
+      message: "Wrong password"
+    };
+    
+    const hash = await bcrypt.hash(newPassword, 10);
+    
+    users[userIndex] = {
+      ...users[userIndex],
+      password: hash,
+    };
+
+    await writeToLocalFile(usersFilePath, users);
+    return true;
+  }
+
+  static async recoverPassword({ newPassword, id }) {
     const users = await readFromLocalFile(usersFilePath);
     const hash = await bcrypt.hash(newPassword, 10);
 

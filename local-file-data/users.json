@@ -63,12 +63,12 @@
     "phone": "3219955652"
   },
   {
-    "id": "c99bc694-7abc-427e-8129-d946002f7fa6",
+    "id": "d2a9d4ee-4221-4f3f-958b-6d94d74516e4",
     "role": "customer",
     "name": "Francisco",
     "lastName": "Gómez",
     "email": "paconcio3@gmail.com",
-    "password": "$2b$10$30f/te7jmUo9GcmX0R.ocOEb2DzChssWtfUBHWQF1Qo2AYeIskvfi",
-    "phone": "3219955655"
+    "password": "$2b$10$r25ocGV4nyeBlRojHKcdje1G7sed7WboJZGxsDD.pTqR/pYVStXca",
+    "phone": ""
   }
 ]
