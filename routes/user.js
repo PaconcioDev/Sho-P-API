@@ -24,7 +24,11 @@ const createUserRouter = ({ userModel }) => {
     userController.update
   );
   
-  usersRouter.delete("/:id", checkLogin, userController.delete);
+  usersRouter.delete(
+    "/:id", 
+    checkLogin, 
+    userController.delete
+  );
 
   return usersRouter;
 };

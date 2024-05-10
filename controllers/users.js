@@ -47,9 +47,18 @@ class UserController {
 
   delete = async (req, res) => {
     const { id } = req.params;
-    const deletedUser = await this.userModel.delete({ id });
+    const { password } = req.body;
+    const deletedUser = await this.userModel.delete({ 
+      id, 
+      password 
+    });
 
-    if (!deletedUser) return res.status(404).json({ error: "User not found" });
+
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    } else if (deletedUser.message) {
+      return res.status(401).json({error: deletedUser.message});
+    }
 
     res.status(200).json({ message: "User successfully deleted" });
   };

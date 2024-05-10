@@ -80,11 +80,16 @@ class UserModel {
     return cleanedUser;
   }
 
-  static async delete({ id }) {
+  static async delete({ id, password }) {
     const users = await readFromLocalFile(usersFilePath);
     const userIndex = users.findIndex((user) => user.id === id);
 
     if (userIndex === -1) return false;
+
+    const isCurrentPasswordCorrect = await bcrypt.compare(password, users[userIndex].password);
+    if (!isCurrentPasswordCorrect) return {
+      message: "Wrong password"
+    };
 
     users.splice(userIndex, 1);
     await writeToLocalFile(usersFilePath, users);

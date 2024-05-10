@@ -128,8 +128,25 @@ class UserModel {
     return await this.findOne({ id });
   }
 
-  static async delete({ id }) {
+  static async delete({ id, password }) {
     try {
+      const [user] = await connection.query(
+        `
+        SELECT
+          u.password
+        FROM user AS u
+        WHERE id = UUID_TO_BIN(?)
+        `,
+        [id]
+      );
+
+      if (!user) return false;
+
+      const isCurrentPasswordCorrect = await bcrypt.compare(password, user.password);
+      if (!isCurrentPasswordCorrect) return {
+        message: "Wrong password"
+      };
+
       const [users] = await connection.query(
         `DELETE FROM user
         WHERE id = UUID_TO_BIN(?)`,
