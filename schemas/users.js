@@ -2,11 +2,17 @@ import z from "zod";
 
 const passwordRegex = new RegExp("^(?=.*[0-9])(?=.*[A-Z]).{8,}$");
 const phoneRegex = new RegExp("^\\d{10}$");
+const nameRegex = new RegExp("^[a-zA-Z]+$");
 
 // const role = z.enum(["customer", "admin", "superadmin"]);
-//TODO: REGEX ONLY LETTERS FOR Name and LastName
-const name = z.string().min(3, "First name must contain at least 3 characters");
-const lastName = z.string().min(3, "Last name must contain at least 3 characters");
+const name = z
+  .string()
+  .regex(nameRegex, "First name should only contain letters")
+  .min(3, "First name must contain at least 3 characters");
+const lastName = z
+  .string()
+  .regex(nameRegex, "Last name should only contain letters")
+  .min(3, "Last name must contain at least 3 characters");
 const email = z.string().email("Must be a valid email");
 const password = z
   .string()

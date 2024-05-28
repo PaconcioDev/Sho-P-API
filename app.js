@@ -4,14 +4,14 @@ import { routerApi } from "./routes/index.js";
 import { options } from "./utils/options.js";
 import { config } from "./config/config.js";
 
-const createApp = ({ productModel, categoryModel, userModel, authModel }) => {
+const createApp = ({ productModel, categoryModel, userModel, authModel, orderModel }) => {
   const app = express();
 
   app.use(cors(options));
   app.disable("x-powered-by");
   app.use(express.json());
 
-  routerApi(app, productModel, categoryModel, userModel, authModel);
+  routerApi(app, productModel, categoryModel, userModel, authModel, orderModel);
 
   app.listen(config.port, () => {
     console.log(`Listening on port http://localhost:${config.port}`);
