@@ -18,14 +18,20 @@ class OrderModel {
     return orders.find(order => order.id.toString() === id);
   }
 
-  static async create({ userId, orderItems, total }) {
+  static async create({ input, userId }) {
     const orders = await readFromLocalFile(ordersFilePath);
+
+    const newOrderItems = input.orderItems.map(({ id, ...cleanedItem }) => ({
+      productId: id,
+      ...cleanedItem,
+    }));
+
     const newOrder = {
       id: randomUUID(),
       userId,
-      orderItems: [...orderItems],
+      orderItems: [...newOrderItems],
       date: new Date().toISOString(),
-      total: total
+      total: input.total
     };
 
     orders.push(newOrder);

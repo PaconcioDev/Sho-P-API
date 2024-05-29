@@ -17,12 +17,11 @@ const createOrderRouter = ({ orderModel }) => {
   );
   ordersRouter.get(
     "/order/:id", 
-    checkLogin,
     orderController.findOrderById
   );
   
   ordersRouter.post(
-    "/:userId",
+    "/:id",
     checkLogin,
     handleValidationError(orderSchema, "body"),
     orderController.create

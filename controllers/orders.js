@@ -16,22 +16,16 @@ class OrderController {
   };
 
   findOrderById = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const order = await this.orderModel.findOrderById({ id });
 
     res.json(order);
   };
 
   create = async (req, res) => {
-    const { userId } = req.params;
-    const { orderItems, total } = req.body;
-
-    const newOrder = await this.orderModel.create({ 
-      userId, 
-      orderItems,
-      total
-    });
-    
+    const { id } = req.params;
+    const { validatedData } = req;
+    const newOrder = await this.orderModel.create({ input: validatedData, userId: id });
     res.status(201).json(newOrder);
   };
 }
