@@ -30,7 +30,7 @@ class OrderModel {
       id: randomUUID(),
       userId,
       orderItems: [...newOrderItems],
-      date: new Date().toISOString(),
+      date: new Date().toLocaleDateString(),
       total: input.total
     };
 
