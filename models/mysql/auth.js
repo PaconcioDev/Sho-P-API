@@ -60,7 +60,7 @@ class AuthModel {
         BIN_TO_UUID(u.id) as id,
         u.role,
         u.name,
-        u.last_name,
+        u.last_name AS lastName,
         u.email,
         u.password,
         u.phone
@@ -71,7 +71,7 @@ class AuthModel {
     );
     if (!user) return false;
 
-    const isCurrentPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+    const isCurrentPasswordCorrect = await bcrypt.compare(currentPassword, user[0].password);
     if (!isCurrentPasswordCorrect) return {
       message: "Wrong password"
     };
@@ -101,7 +101,7 @@ class AuthModel {
         BIN_TO_UUID(u.id) as id,
         u.role,
         u.name,
-        u.last_name,
+        u.last_name AS lastName,
         u.email,
         u.phone
       FROM user AS u

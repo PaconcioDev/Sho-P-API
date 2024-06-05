@@ -29,6 +29,7 @@ class UserModel {
     );
     return users;
   }
+  
   static async findOne({ id }) {
     const [user] = await connection.query(
       `
@@ -36,7 +37,7 @@ class UserModel {
         BIN_TO_UUID(u.id) AS id, 
         u.role,
         u.name,
-        u.last_name,
+        u.last_name AS lastName,
         u.email,
         u.phone
       FROM user as u
@@ -142,14 +143,22 @@ class UserModel {
 
       if (!user) return false;
 
-      const isCurrentPasswordCorrect = await bcrypt.compare(password, user.password);
+      const isCurrentPasswordCorrect = await bcrypt.compare(password, user[0].password);
       if (!isCurrentPasswordCorrect) return {
         message: "Wrong password"
       };
 
+      await connection.query(
+        `
+          DELETE FROM \`order\`
+          WHERE user_id = UUID_TO_BIN(?);
+        `,
+        [id]
+      );
+
       const [users] = await connection.query(
         `DELETE FROM user
-        WHERE id = UUID_TO_BIN(?)`,
+        WHERE id = UUID_TO_BIN(?);`,
         [id]
       );
 
