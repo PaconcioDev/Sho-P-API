@@ -143,7 +143,7 @@ class AuthModel {
       [email.email]
     );
 
-    if (!user) return false;
+    if (!user || user.length <= 0) return false;
 
     const userId = user[0].id;
     const userEmail = user[0].email;
@@ -154,7 +154,7 @@ class AuthModel {
       expiresIn: "5min",
     });
 
-    const link = `https://localhost:5173/account/recovery/${token}`;
+    const link = `http://localhost:5173/account/recovery/${token}`;
     const html = mailContent(link);
 
     const mail = {
