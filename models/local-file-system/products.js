@@ -6,15 +6,29 @@ import {
   writeToLocalFile,
 } from "../../utils/readAndWriteLocal.js";
 
+const restoreDeleteProducts = async () => {
+  const products = await readFromLocalFile(productsFilePath);
+  const now = new Date();
+
+  const updatedProducts = products.map(product => {
+    if (product.deletedAt && (now - new Date(product.deletedAt)) > 3 * 60 * 1000) {
+      delete product.deletedAt;
+    }
+    return product;
+  });
+
+  await writeToLocalFile(productsFilePath, updatedProducts);
+};
+
 class ProductModel {
   static async getAll() {
     const products = await readFromLocalFile(productsFilePath);
-    return products;
+    return products.filter(product => !product.deletedAt);
   }
 
   static async findOne({ id }) {
     const products = await readFromLocalFile(productsFilePath);
-    return products.find((product) => product.id === id);
+    return products.find((product) => product.id === id && !product.deletedAt);
   }
 
   static async create({ input }) {
@@ -58,10 +72,10 @@ class ProductModel {
 
     if (productIndex === -1) return false;
 
-    products.splice(productIndex, 1);
+    products[productIndex].deletedAt = new Date().toISOString();
     await writeToLocalFile(productsFilePath, products);
     return true;
   }
 }
 
-export { ProductModel };
+export { ProductModel, restoreDeleteProducts };

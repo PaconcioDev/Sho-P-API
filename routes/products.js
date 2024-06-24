@@ -25,7 +25,7 @@ const createProductRouter = ({ productModel }) => {
     productController.update
   );
   
-  productsRouter.delete("/:id", checkAdminRole, productController.delete);
+  productsRouter.patch("/delete/:id", checkAdminRole, productController.delete);
 
   return productsRouter;
 };
