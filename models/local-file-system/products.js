@@ -1,10 +1,10 @@
-import { randomUUID } from "node:crypto";
-import { completeCategory, updateCategory } from "../../utils/category.js";
-import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
+import { randomUUID } from 'node:crypto';
+import { completeCategory, updateCategory } from '../../utils/category.js';
+import { productsFilePath, categoriesFilePath } from '../../utils/filePath.js';
 import {
   readFromLocalFile,
-  writeToLocalFile,
-} from "../../utils/readAndWriteLocal.js";
+  writeToLocalFile
+} from '../../utils/readAndWriteLocal.js';
 
 const restoreDeleteProducts = async () => {
   const products = await readFromLocalFile(productsFilePath);
@@ -21,25 +21,26 @@ const restoreDeleteProducts = async () => {
 };
 
 class ProductModel {
-  static async getAll() {
+  static async getAll () {
     const products = await readFromLocalFile(productsFilePath);
     return products.filter(product => !product.deletedAt);
   }
 
-  static async findOne({ id }) {
+  static async findOne ({ id }) {
     const products = await readFromLocalFile(productsFilePath);
     return products.find((product) => product.id === id && !product.deletedAt);
   }
 
-  static async create({ input }) {
+  static async create ({ input }) {
     const categories = await readFromLocalFile(categoriesFilePath);
     const products = await readFromLocalFile(productsFilePath);
+    // eslint-disable-next-line camelcase
     const { category_id, ...cleanedInput } = input;
 
     const newProduct = {
       id: randomUUID(),
       ...cleanedInput,
-      category: completeCategory(categories, category_id),
+      category: completeCategory(categories, category_id)
     };
 
     products.push(newProduct);
@@ -47,7 +48,8 @@ class ProductModel {
     return newProduct;
   }
 
-  static async update({ id, input }) {
+  static async update ({ id, input }) {
+    // eslint-disable-next-line camelcase
     const { category_id, ...cleanedInput } = input;
     const products = await readFromLocalFile(productsFilePath);
     const productIndex = products.findIndex((product) => product.id === id);
@@ -59,14 +61,14 @@ class ProductModel {
     products[productIndex] = {
       ...products[productIndex],
       ...cleanedInput,
-      category: updateCategory(products, productIndex, categories, category_id),
+      category: updateCategory(products, productIndex, categories, category_id)
     };
 
     await writeToLocalFile(productsFilePath, products);
     return products[productIndex];
   }
 
-  static async delete({ id }) {
+  static async delete ({ id }) {
     const products = await readFromLocalFile(productsFilePath);
     const productIndex = products.findIndex((product) => product.id === id);
 

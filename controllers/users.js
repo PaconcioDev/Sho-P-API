@@ -1,5 +1,5 @@
 class UserController {
-  constructor({ userModel }) {
+  constructor ({ userModel }) {
     this.userModel = userModel;
   }
 
@@ -12,7 +12,7 @@ class UserController {
     const { id } = req.params;
     const user = await this.userModel.findOne({ id });
 
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
     res.json(user);
   };
@@ -22,8 +22,7 @@ class UserController {
 
     const newUser = await this.userModel.create({ input: validatedData });
 
-    if (newUser === "phone" || newUser === "email")
-      return res.status(422).json({ error: "User already registered" });
+    if (newUser === 'phone' || newUser === 'email') { return res.status(422).json({ error: 'User already registered' }); }
 
     res.status(201).json(newUser);
   };
@@ -31,16 +30,15 @@ class UserController {
   update = async (req, res) => {
     const { validatedData } = req;
     const { id } = req.params;
-    
+
     const updatedUser = await this.userModel.update({
       id,
-      input: validatedData,
+      input: validatedData
     });
 
-    if (!updatedUser) return res.status(404).json({ error: "User not found" });
+    if (!updatedUser) return res.status(404).json({ error: 'User not found' });
 
-    if (updatedUser === "phone" || updatedUser === "email")
-      return res.status(422).json({ error: "User already registered" });
+    if (updatedUser === 'phone' || updatedUser === 'email') { return res.status(422).json({ error: 'User already registered' }); }
 
     res.status(200).json(updatedUser);
   };
@@ -48,19 +46,18 @@ class UserController {
   delete = async (req, res) => {
     const { id } = req.params;
     const { password } = req.body;
-    const deletedUser = await this.userModel.delete({ 
-      id, 
-      password 
+    const deletedUser = await this.userModel.delete({
+      id,
+      password
     });
 
-
     if (!deletedUser) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     } else if (deletedUser.message) {
-      return res.status(401).json({error: deletedUser.message});
+      return res.status(401).json({ error: deletedUser.message });
     }
 
-    res.status(200).json({ message: "User successfully deleted" });
+    res.status(200).json({ message: 'User successfully deleted' });
   };
 }
 

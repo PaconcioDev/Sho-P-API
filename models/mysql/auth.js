@@ -1,20 +1,20 @@
-import jwt from "jsonwebtoken";
-import mysql from "mysql2/promise";
-import bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
-import { config } from "../../config/config.js";
-import { mailContent } from "../../utils/mailContent.js";
+import jwt from 'jsonwebtoken';
+import mysql from 'mysql2/promise';
+import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
+import { config } from '../../config/config.js';
+import { mailContent } from '../../utils/mailContent.js';
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
   user: config.dbUser,
   port: config.dbPort,
   password: config.dbPassword,
-  database: config.dbName,
+  database: config.dbName
 });
 
 class AuthModel {
-  static async login({ input }) {
+  static async login ({ input }) {
     const [users] = await connection.query(
       `
       SELECT 
@@ -40,20 +40,20 @@ class AuthModel {
     const userForToken = {
       id: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role
     };
 
     const token = jwt.sign(userForToken, config.jwtSecret, {
-      expiresIn: 60 * 60 * 24 * 7,
+      expiresIn: 60 * 60 * 24 * 7
     });
 
     return {
       user,
-      token,
+      token
     };
   }
 
-  static async changePassword({ currentPassword, newPassword, id }) {
+  static async changePassword ({ currentPassword, newPassword, id }) {
     const [user] = await connection.query(
       `
       SELECT
@@ -72,10 +72,12 @@ class AuthModel {
     if (!user) return false;
 
     const isCurrentPasswordCorrect = await bcrypt.compare(currentPassword, user[0].password);
-    if (!isCurrentPasswordCorrect) return {
-      message: "Wrong password"
-    };
-    
+    if (!isCurrentPasswordCorrect) {
+      return {
+        message: 'Wrong password'
+      };
+    }
+
     const hash = await bcrypt.hash(newPassword, 10);
 
     try {
@@ -88,13 +90,13 @@ class AuthModel {
         [hash, id]
       );
     } catch (error) {
-      throw new Error("Error changing password");
+      throw new Error('Error changing password');
     }
 
     return user;
   }
 
-  static async recoverPassword({ newPassword, id }) {
+  static async recoverPassword ({ newPassword, id }) {
     const [user] = await connection.query(
       `
       SELECT
@@ -124,13 +126,13 @@ class AuthModel {
         [hash, id]
       );
     } catch (error) {
-      throw new Error("Error changing password");
+      throw new Error('Error changing password');
     }
 
     return user;
   }
 
-  static async sendPasswordEmail({ email }) {
+  static async sendPasswordEmail ({ email }) {
     const [user] = await connection.query(
       `
       SELECT 
@@ -151,7 +153,7 @@ class AuthModel {
     const payload = { sub: userId };
 
     const token = jwt.sign(payload, config.jwtSecret, {
-      expiresIn: "5min",
+      expiresIn: '5min'
     });
 
     const link = `http://localhost:5173/account/recovery/${token}`;
@@ -160,23 +162,23 @@ class AuthModel {
     const mail = {
       from: `${config.mailAddress}`,
       to: `${userEmail}`,
-      subject: "Sho-P password recovery",
-      html: html,
+      subject: 'Sho-P password recovery',
+      html
     };
 
     const rta = await this.sendMail(mail);
     return rta;
   }
 
-  static async sendMail(infoMail) {
+  static async sendMail (infoMail) {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       secure: true,
       port: 465,
       auth: {
         user: `${config.mailAddress}`,
-        pass: `${config.mailPassword}`,
-      },
+        pass: `${config.mailPassword}`
+      }
     });
 
     await transporter.sendMail(infoMail);

@@ -1,16 +1,16 @@
-import mysql from "mysql2/promise";
-import { config } from "../../config/config.js";
+import mysql from 'mysql2/promise';
+import { config } from '../../config/config.js';
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
   user: config.dbUser,
   port: config.dbPort,
   password: config.dbPassword,
-  database: config.dbName,
+  database: config.dbName
 });
 
 class CategoryModel {
-  static async getAll() {
+  static async getAll () {
     const [categories] = await connection.query(
       `
       SELECT * 
@@ -24,7 +24,7 @@ class CategoryModel {
     return categories;
   }
 
-  static async findOne({ id }) {
+  static async findOne ({ id }) {
     const [category] = await connection.query(
       `
       SELECT * 
@@ -34,11 +34,11 @@ class CategoryModel {
       `,
       [id]
     );
-  
-    return category[0]; 
+
+    return category[0];
   }
 
-  static async findProducts({ id }) {
+  static async findProducts ({ id }) {
     const [products] = await connection.query(
       `
       SELECT *, BIN_TO_UUID(id) id
@@ -52,7 +52,7 @@ class CategoryModel {
     return products;
   }
 
-  static async create({ input }) {
+  static async create ({ input }) {
     try {
       await connection.query(
         `
@@ -64,7 +64,7 @@ class CategoryModel {
         [input.name]
       );
     } catch (error) {
-      throw new Error("Error creating category");
+      throw new Error('Error creating category');
     }
 
     const [categories] = await connection.query(
@@ -80,7 +80,7 @@ class CategoryModel {
     return categories[0];
   }
 
-  static async update({ id, input }) {
+  static async update ({ id, input }) {
     try {
       await connection.query(
         `
@@ -92,13 +92,13 @@ class CategoryModel {
         [input, id]
       );
     } catch (error) {
-      throw new Error("Error updating category");
+      throw new Error('Error updating category');
     }
 
     return this.findOne({ id });
   }
 
-  static async delete({ id }) {
+  static async delete ({ id }) {
     try {
       const [categories] = await connection.query(
         `
@@ -111,7 +111,7 @@ class CategoryModel {
 
       return categories.affectedRows > 0;
     } catch (error) {
-      throw new Error("Error deleting category");
+      throw new Error('Error deleting category');
     }
   }
 }

@@ -1,32 +1,32 @@
-import { Router } from "express";
-import { UserController } from "../controllers/users.js";
-import { checkLogin } from "../middlewares/auth.js";
-import { handleValidationError } from "../middlewares/validation.js";
-import { updateUserSchema, userSchema } from "../schemas/users.js";
+import { Router } from 'express';
+import { UserController } from '../controllers/users.js';
+import { checkLogin } from '../middlewares/auth.js';
+import { handleValidationError } from '../middlewares/validation.js';
+import { updateUserSchema, userSchema } from '../schemas/users.js';
 
 const createUserRouter = ({ userModel }) => {
   const usersRouter = Router();
 
   const userController = new UserController({ userModel });
 
-  usersRouter.get("/", userController.getAll);
-  usersRouter.get("/:id", userController.findOne);
+  usersRouter.get('/', userController.getAll);
+  usersRouter.get('/:id', userController.findOne);
 
   usersRouter.post(
-    "/",
-    handleValidationError(userSchema, "body"),
+    '/',
+    handleValidationError(userSchema, 'body'),
     userController.create
   );
   usersRouter.patch(
-    "/:id",
+    '/:id',
     checkLogin,
-    handleValidationError(updateUserSchema, "body", true),
+    handleValidationError(updateUserSchema, 'body', true),
     userController.update
   );
-  
+
   usersRouter.delete(
-    "/:id", 
-    checkLogin, 
+    '/:id',
+    checkLogin,
     userController.delete
   );
 

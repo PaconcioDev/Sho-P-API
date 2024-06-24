@@ -1,5 +1,5 @@
 class CategoryController {
-  constructor({ categoryModel }) {
+  constructor ({ categoryModel }) {
     this.categoryModel = categoryModel;
   }
 
@@ -12,7 +12,7 @@ class CategoryController {
     const { id } = req.params;
     const category = await this.categoryModel.findOne({ id });
 
-    if (!category) return res.status(404).json({ error: "Category not found" });
+    if (!category) return res.status(404).json({ error: 'Category not found' });
 
     res.json(category);
   };
@@ -21,8 +21,7 @@ class CategoryController {
     const { id } = req.params;
     const filteredProducts = await this.categoryModel.findProducts({ id });
 
-    if (!filteredProducts)
-      return res.status(404).json({ error: "No products on this category" });
+    if (!filteredProducts) { return res.status(404).json({ error: 'No products on this category' }); }
 
     res.json(filteredProducts);
   };
@@ -30,9 +29,9 @@ class CategoryController {
   create = async (req, res) => {
     const { validatedData } = req;
     const newCategory = await this.categoryModel.create({
-      input: validatedData,
+      input: validatedData
     });
-    
+
     res.status(201).json(newCategory);
   };
 
@@ -41,11 +40,10 @@ class CategoryController {
     const { id } = req.params;
     const updatedCategory = await this.categoryModel.update({
       id,
-      input: validatedData,
+      input: validatedData
     });
 
-    if (!updatedCategory)
-      return res.status(404).json({ error: "Category not found" });
+    if (!updatedCategory) { return res.status(404).json({ error: 'Category not found' }); }
 
     res.json(updatedCategory);
   };
@@ -54,8 +52,7 @@ class CategoryController {
     const { id } = req.params;
     const deletedCategory = await this.categoryModel.delete({ id });
 
-    if (!deletedCategory)
-      return res.status(404).json({ error: "Category not found" });
+    if (!deletedCategory) { return res.status(404).json({ error: 'Category not found' }); }
 
     res
       .status(200)

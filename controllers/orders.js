@@ -1,5 +1,5 @@
 class OrderController {
-  constructor({ orderModel }) {
+  constructor ({ orderModel }) {
     this.orderModel = orderModel;
   }
 

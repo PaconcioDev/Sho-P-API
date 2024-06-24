@@ -1,19 +1,19 @@
-import mysql from "mysql2/promise";
-import bcrypt from "bcrypt";
-import snakeCaseKeys from "snakecase-keys";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
-import { config } from "../../config/config.js";
+import mysql from 'mysql2/promise';
+import bcrypt from 'bcrypt';
+import snakeCaseKeys from 'snakecase-keys';
+import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter.js';
+import { config } from '../../config/config.js';
 
 const connection = await mysql.createConnection({
   host: config.dbHost,
   user: config.dbUser,
   port: config.dbPort,
   password: config.dbPassword,
-  database: config.dbName,
+  database: config.dbName
 });
 
 class UserModel {
-  static async getAll() {
+  static async getAll () {
     const [users] = await connection.query(
       `
       SELECT
@@ -29,8 +29,8 @@ class UserModel {
     );
     return users;
   }
-  
-  static async findOne({ id }) {
+
+  static async findOne ({ id }) {
     const [user] = await connection.query(
       `
       SELECT
@@ -50,23 +50,23 @@ class UserModel {
     return user[0];
   }
 
-  static async create({ input }) {
+  static async create ({ input }) {
     const isDuplicate = await this.isDuplicatePhoneOrEmail({
       phone: input.phone,
-      email: input.email,
+      email: input.email
     });
 
-    if (isDuplicate === "phone") return "phone";
-    if (isDuplicate === "email") return "email";
+    if (isDuplicate === 'phone') return 'phone';
+    if (isDuplicate === 'email') return 'email';
 
     const formatName = capitalizeFirstLetter(input.name);
     const formatLastName = capitalizeFirstLetter(input.lastName);
 
-    const [uuidResult] = await connection.query("SELECT UUID() uuid;");
+    const [uuidResult] = await connection.query('SELECT UUID() uuid;');
     const [{ uuid }] = uuidResult;
 
     const hash = await bcrypt.hash(input.password, 10);
-    
+
     try {
       let query;
       let queryParams;
@@ -81,7 +81,7 @@ class UserModel {
           formatLastName,
           input.email,
           hash,
-          input.phone,
+          input.phone
         ];
       } else {
         query = `
@@ -93,22 +93,22 @@ class UserModel {
 
       await connection.query(query, queryParams);
     } catch (e) {
-      throw new Error("Error creating user");
+      throw new Error('Error creating user');
     }
 
     const user = await this.findOne({ id: uuid });
     return user;
   }
 
-  static async update({ id, input }) {
+  static async update ({ id, input }) {
     if (input.phone || input.email) {
       const isDuplicate = await this.isDuplicatePhoneOrEmail({
         phone: input.phone,
-        email: input.email,
+        email: input.email
       });
 
-      if (isDuplicate === "phone") return "phone";
-      if (isDuplicate === "email") return "email";
+      if (isDuplicate === 'phone') return 'phone';
+      if (isDuplicate === 'email') return 'email';
     }
 
     try {
@@ -123,13 +123,13 @@ class UserModel {
         [snakeCaseInput, id]
       );
     } catch (e) {
-      throw new Error("Error updating user");
+      throw new Error('Error updating user');
     }
 
     return await this.findOne({ id });
   }
 
-  static async delete({ id, password }) {
+  static async delete ({ id, password }) {
     try {
       const [user] = await connection.query(
         `
@@ -144,9 +144,11 @@ class UserModel {
       if (!user) return false;
 
       const isCurrentPasswordCorrect = await bcrypt.compare(password, user[0].password);
-      if (!isCurrentPasswordCorrect) return {
-        message: "Wrong password"
-      };
+      if (!isCurrentPasswordCorrect) {
+        return {
+          message: 'Wrong password'
+        };
+      }
 
       await connection.query(
         `
@@ -164,15 +166,15 @@ class UserModel {
 
       return users.affectedRows > 0;
     } catch (error) {
-      throw new Error("Error deleting user");
+      throw new Error('Error deleting user');
     }
   }
 
-  static async isDuplicatePhoneOrEmail({ phone, email }) {
+  static async isDuplicatePhoneOrEmail ({ phone, email }) {
     const usersArr = await this.getAll();
 
-    if (phone && usersArr.some((user) => user.phone === phone)) return "phone";
-    if (email && usersArr.some((user) => user.email === email)) return "email";
+    if (phone && usersArr.some((user) => user.phone === phone)) return 'phone';
+    if (email && usersArr.some((user) => user.email === email)) return 'email';
 
     return null;
   }

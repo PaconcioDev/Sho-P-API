@@ -1,4 +1,4 @@
-function handleValidationError(schema, property, optional = false) {
+function handleValidationError (schema, property, optional = false) {
   return (req, res, next) => {
     const data = req[property];
     const result = !optional
@@ -7,7 +7,7 @@ function handleValidationError(schema, property, optional = false) {
 
     if (result.error) {
       return res.status(422).json({
-        error: JSON.parse(result.error.message),
+        error: JSON.parse(result.error.message)
       });
     }
 

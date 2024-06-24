@@ -1,5 +1,5 @@
 class ProductController {
-  constructor({ productModel }) {
+  constructor ({ productModel }) {
     this.productModel = productModel;
   }
 
@@ -12,7 +12,7 @@ class ProductController {
     const { id } = req.params;
     const product = await this.productModel.findOne({ id });
 
-    if (!product) return res.status(404).json({ error: "Product not found" });
+    if (!product) return res.status(404).json({ error: 'Product not found' });
 
     res.json(product);
   };
@@ -28,11 +28,10 @@ class ProductController {
     const { id } = req.params;
     const updatedProduct = await this.productModel.update({
       id,
-      input: validatedData,
+      input: validatedData
     });
 
-    if (!updatedProduct)
-      return res.status(404).json({ error: "Product not found" });
+    if (!updatedProduct) { return res.status(404).json({ error: 'Product not found' }); }
 
     res.json(updatedProduct);
   };
@@ -41,8 +40,7 @@ class ProductController {
     const { id } = req.params;
     const deletedProduct = await this.productModel.delete({ id });
 
-    if (!deletedProduct)
-      return res.status(404).json({ error: "Product not found" });
+    if (!deletedProduct) { return res.status(404).json({ error: 'Product not found' }); }
 
     res
       .status(200)

@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const productId = z.string().uuid();
 const quantity = z.number().int().min(1);
@@ -11,17 +11,17 @@ const image = z.string().url();
 
 const category = z.object({
   id: categoryId,
-  name: name
+  name
 });
 
 const orderItemSchema = z.object({
   id: productId,
-  name: name,
-  image: image,
-  description: description,
-  price: price,
-  category: category,
-  quantity: quantity,
+  name,
+  image,
+  description,
+  price,
+  category,
+  quantity
 });
 
 const orderSchema = z.object({

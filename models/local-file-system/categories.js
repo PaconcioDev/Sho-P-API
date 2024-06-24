@@ -1,21 +1,21 @@
-import { productsFilePath, categoriesFilePath } from "../../utils/filePath.js";
+import { productsFilePath, categoriesFilePath } from '../../utils/filePath.js';
 import {
   readFromLocalFile,
-  writeToLocalFile,
-} from "../../utils/readAndWriteLocal.js";
+  writeToLocalFile
+} from '../../utils/readAndWriteLocal.js';
 
 class CategoryModel {
-  static async getAll() {
+  static async getAll () {
     const categories = await readFromLocalFile(categoriesFilePath);
     return categories;
   }
 
-  static async findOne({ id }) {
+  static async findOne ({ id }) {
     const categories = await readFromLocalFile(categoriesFilePath);
     return categories.find((category) => category.id.toString() === id);
   }
 
-  static async findProducts({ id }) {
+  static async findProducts ({ id }) {
     const products = await readFromLocalFile(productsFilePath);
 
     return products
@@ -24,19 +24,19 @@ class CategoryModel {
         const { category, ...cleanedProduct } = product;
         return {
           ...cleanedProduct,
-          category_id: category.id,
+          category_id: category.id
         };
       });
   }
 
-  static async create({ input }) {
+  static async create ({ input }) {
     const categories = await readFromLocalFile(categoriesFilePath);
     const lastCategory = categories.length - 1;
     const lastId = categories[lastCategory].id;
 
     const newCategory = {
       id: lastId + 1,
-      ...input,
+      ...input
     };
 
     categories.push(newCategory);
@@ -44,7 +44,7 @@ class CategoryModel {
     return newCategory;
   }
 
-  static async update({ id, input }) {
+  static async update ({ id, input }) {
     const categories = await readFromLocalFile(categoriesFilePath);
 
     const categoryIndex = categories.findIndex(
@@ -55,13 +55,14 @@ class CategoryModel {
 
     categories[categoryIndex] = {
       ...categories[categoryIndex],
-      ...input,
+      ...input
     };
 
     await writeToLocalFile(categoriesFilePath, categories);
     return categories[categoryIndex];
   }
-  static async delete({ id }) {
+
+  static async delete ({ id }) {
     const categories = await readFromLocalFile(categoriesFilePath);
 
     const categoryIndex = categories.findIndex(
