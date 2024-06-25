@@ -4,15 +4,29 @@ import {
   writeToLocalFile
 } from '../../utils/readAndWriteLocal.js';
 
+const restoreDeletedCategories = async () => {
+  const categories = await readFromLocalFile(categoriesFilePath);
+  const now = new Date();
+
+  const updateCategories = categories.map(category => {
+    if (category.deletedAt && (now - new Date(category.deletedAt)) > 3 * 60 * 1000) {
+      delete category.deletedAt;
+    }
+    return category;
+  });
+
+  await writeToLocalFile(categoriesFilePath, updateCategories);
+};
+
 class CategoryModel {
   static async getAll () {
     const categories = await readFromLocalFile(categoriesFilePath);
-    return categories;
+    return categories.filter(category => !category.deletedAt);
   }
 
   static async findOne ({ id }) {
     const categories = await readFromLocalFile(categoriesFilePath);
-    return categories.find((category) => category.id.toString() === id);
+    return categories.find((category) => category.id.toString() === id && !category.deletedAt);
   }
 
   static async findProducts ({ id }) {
@@ -71,10 +85,10 @@ class CategoryModel {
 
     if (categoryIndex === -1) return false;
 
-    categories.splice(categoryIndex, 1);
+    categories[categoryIndex].deletedAt = new Date().toISOString();
     await writeToLocalFile(categoriesFilePath, categories);
     return true;
   }
 }
 
-export { CategoryModel };
+export { CategoryModel, restoreDeletedCategories };

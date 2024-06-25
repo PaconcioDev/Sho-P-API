@@ -9,12 +9,27 @@ const connection = await mysql.createConnection({
   database: config.dbName
 });
 
+const restoreDeleteCategories = async () => {
+  try {
+    await connection.query(
+      `
+      UPDATE category
+      SET deleted_at = NULL
+      WHERE deleted_at IS NOT NULL AND deleted_at < NOW() - INTERVAL 1 HOUR;
+      `
+    );
+  } catch (error) {
+    throw new Error('Error restoring category');
+  }
+};
+
 class CategoryModel {
   static async getAll () {
     const [categories] = await connection.query(
       `
       SELECT * 
       FROM category
+      WHERE deleted_at is NULL
       ORDER BY id
       ASC
       ;
@@ -29,7 +44,7 @@ class CategoryModel {
       `
       SELECT * 
       FROM category
-      WHERE id = ?
+      WHERE id = ? AND deleted_at IS NULL
       LIMIT 1;
       `,
       [id]
@@ -86,7 +101,7 @@ class CategoryModel {
         `
         UPDATE category
         SET ?
-        WHERE id = ?
+        WHERE id = ? AND deleted_at IS NULL
         ;
         `,
         [input, id]
@@ -102,7 +117,8 @@ class CategoryModel {
     try {
       const [categories] = await connection.query(
         `
-        DELETE FROM category
+        UPDATE category
+        SET deleted_at = NOW()
         WHERE id = ?
         ;
         `,
@@ -116,4 +132,4 @@ class CategoryModel {
   }
 }
 
-export { CategoryModel };
+export { CategoryModel, restoreDeleteCategories };

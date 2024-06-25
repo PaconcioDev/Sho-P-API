@@ -9,7 +9,7 @@ const connection = await mysql.createConnection({
   database: config.dbName
 });
 
-const restoreDeleteProducts = async () => {
+const restoreDeletedProducts = async () => {
   try {
     await connection.query(
       `
@@ -130,4 +130,4 @@ class ProductModel {
   }
 }
 
-export { ProductModel, restoreDeleteProducts };
+export { ProductModel, restoreDeletedProducts };

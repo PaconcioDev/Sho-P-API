@@ -5,7 +5,7 @@ import { routerApi } from './routes/index.js';
 import { options } from './utils/options.js';
 import { config } from './config/config.js';
 
-const createApp = ({ productModel, restoreDeleteProducts, categoryModel, userModel, authModel, orderModel }) => {
+const createApp = ({ productModel, restoreDeletedProducts, restoreDeletedCategories, categoryModel, userModel, authModel, orderModel }) => {
   const app = express();
 
   app.use(cors(options));
@@ -18,8 +18,10 @@ const createApp = ({ productModel, restoreDeleteProducts, categoryModel, userMod
     console.log(`Listening on port http://localhost:${config.port}`);
   });
 
-  const job = new CronJob('0 * * * *', restoreDeleteProducts);
-  job.start();
+  const restoreProducts = new CronJob('0 * * * *', restoreDeletedProducts);
+  const restoreCategories = new CronJob('0 * * * *', restoreDeletedCategories);
+  restoreProducts.start();
+  restoreCategories.start();
 };
 
 export { createApp };

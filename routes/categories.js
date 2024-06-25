@@ -26,7 +26,7 @@ const createCategoryRouter = ({ categoryModel }) => {
     categoryController.update
   );
 
-  categoriesRouter.delete('/:id', checkAdminRole, categoryController.delete);
+  categoriesRouter.patch('/delete/:id', checkAdminRole, categoryController.delete);
 
   return categoriesRouter;
 };

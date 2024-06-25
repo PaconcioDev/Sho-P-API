@@ -6,7 +6,7 @@ import {
   writeToLocalFile
 } from '../../utils/readAndWriteLocal.js';
 
-const restoreDeleteProducts = async () => {
+const restoreDeletedProducts = async () => {
   const products = await readFromLocalFile(productsFilePath);
   const now = new Date();
 
@@ -80,4 +80,4 @@ class ProductModel {
   }
 }
 
-export { ProductModel, restoreDeleteProducts };
+export { ProductModel, restoreDeletedProducts };
