@@ -9,7 +9,7 @@ const connection = await mysql.createConnection({
   database: config.dbName
 });
 
-const restoreDeleteCategories = async () => {
+const restoreDeletedCategories = async () => {
   try {
     await connection.query(
       `
@@ -132,4 +132,4 @@ class CategoryModel {
   }
 }
 
-export { CategoryModel, restoreDeleteCategories };
+export { CategoryModel, restoreDeletedCategories };
