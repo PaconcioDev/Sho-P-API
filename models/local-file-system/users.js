@@ -36,7 +36,7 @@ class UserModel {
 
     const newUser = {
       id: randomUUID(),
-      role: 'customer',
+      role: input.role,
       name: formatName,
       lastName: formatLastName,
       email: input.email,

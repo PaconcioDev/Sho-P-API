@@ -73,10 +73,11 @@ class UserModel {
 
       if (input.phone) {
         query = `
-          INSERT INTO user (id, name, last_name, email, password, phone)
-          VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?);
+          INSERT INTO user (id, role, name, last_name, email, password, phone)
+          VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?, ?);
         `;
         queryParams = [
+          input.role,
           formatName,
           formatLastName,
           input.email,
@@ -85,10 +86,10 @@ class UserModel {
         ];
       } else {
         query = `
-          INSERT INTO user (id, name, last_name, email, password)
-          VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?);
+          INSERT INTO user (id, role, name, last_name, email, password)
+          VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?);
         `;
-        queryParams = [formatName, formatLastName, input.email, hash];
+        queryParams = [input.role, formatName, formatLastName, input.email, hash];
       }
 
       await connection.query(query, queryParams);

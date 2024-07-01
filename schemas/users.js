@@ -5,7 +5,7 @@ const passwordRegex = new RegExp('^(?=.*[0-9])(?=.*[A-Z]).{8,}$');
 const phoneRegex = new RegExp('^\\d{10}$');
 const nameRegex = new RegExp('^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$');
 
-// const role = z.enum(["customer", "admin", "superadmin"]);
+const role = z.enum(['customer', 'admin']);
 const name = z
   .string()
   .regex(nameRegex, 'First name should only contain letters')
@@ -24,6 +24,7 @@ const password = z
 const phone = z.string().regex(phoneRegex, 'Must be a valid phone number');
 
 const userSchema = z.object({
+  role,
   name,
   lastName,
   email,
