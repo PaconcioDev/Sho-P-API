@@ -33,7 +33,6 @@ class ProductModel {
         p.description, 
         p.price, 
         p.image,
-        p.created_at AS createdAt,
         JSON_OBJECT("id", c.id, "name", c.name) AS category
       FROM product AS p
       INNER JOIN category AS c
@@ -55,7 +54,6 @@ class ProductModel {
         p.description, 
         p.price, 
         p.image,
-        p.created_at AS createdAt,
         JSON_OBJECT("id", c.id, "name", c.name) AS category
       FROM product AS p
       INNER JOIN category AS c
@@ -80,8 +78,8 @@ class ProductModel {
 
     try {
       await connection.query(
-        `INSERT INTO product (id, name, description, price, image, created_at, category_id)
-        VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?, ?);`,
+        `INSERT INTO product (id, name, description, price, image, category_id)
+        VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?);`,
         // eslint-disable-next-line camelcase
         [name, description, price, image, createdDate, category_id]
       );
