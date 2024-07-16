@@ -4,6 +4,7 @@ import { CategoryModel, restoreDeletedCategories } from './models/mysql/categori
 import { UserModel } from './models/mysql/user.js';
 import { AuthModel } from './models/mysql/auth.js';
 import { OrderModel } from './models/mysql/orders.js';
+import { ImageModel } from './models/mysql/images.js';
 createApp({
   productModel: ProductModel,
   restoreDeletedProducts,
@@ -11,5 +12,6 @@ createApp({
   categoryModel: CategoryModel,
   userModel: UserModel,
   authModel: AuthModel,
-  orderModel: OrderModel
+  orderModel: OrderModel,
+  imageModel: ImageModel
 });

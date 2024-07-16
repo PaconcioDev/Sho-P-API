@@ -5,14 +5,23 @@ import { routerApi } from './routes/index.js';
 import { options } from './utils/options.js';
 import { config } from './config/config.js';
 
-const createApp = ({ productModel, restoreDeletedProducts, restoreDeletedCategories, categoryModel, userModel, authModel, orderModel }) => {
+const createApp = ({
+  productModel,
+  restoreDeletedProducts,
+  restoreDeletedCategories,
+  categoryModel,
+  userModel,
+  authModel,
+  orderModel,
+  imageModel
+}) => {
   const app = express();
 
   app.use(cors(options));
   app.disable('x-powered-by');
   app.use(express.json());
 
-  routerApi(app, productModel, categoryModel, userModel, authModel, orderModel);
+  routerApi(app, productModel, categoryModel, userModel, authModel, orderModel, imageModel);
 
   app.listen(config.port, () => {
     console.log(`Listening on port http://localhost:${config.port}`);
