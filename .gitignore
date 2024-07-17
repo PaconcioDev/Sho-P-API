@@ -234,3 +234,5 @@ mysql_data
 consults
 .env
 .vscode
+
+local-file-data

@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:mysql": "nodemon ./server-with-mysql.js",
-    "start:local": "nodemon ./server-with-local.js",
+    "start:mysql": "nodemon ./src/server-with-mysql.js",
+    "start:local": "nodemon ./src/server-with-local.js",
     "start": "node app.js",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"
