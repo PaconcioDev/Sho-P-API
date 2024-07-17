@@ -74,14 +74,12 @@ class ProductModel {
     const [uuidResult] = await connection.query('SELECT UUID() uuid;');
     const [{ uuid }] = uuidResult;
 
-    const createdDate = new Date().toLocaleDateString();
-
     try {
       await connection.query(
-        `INSERT INTO product (id, name, description, price, image, category_id)
+        `INSERT INTO product (id, name, description, price, image,  category_id)
         VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?);`,
         // eslint-disable-next-line camelcase
-        [name, description, price, image, createdDate, category_id]
+        [name, description, price, image, category_id]
       );
     } catch (e) {
       throw new Error('Error creating product');

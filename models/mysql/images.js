@@ -11,7 +11,7 @@ const connection = await mysql.createConnection({
 });
 
 class ImageModel {
-  static async upload ({ file, productId }) {
+  static async cloudinaryUpload ({ file }) {
     const response = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream({}, (err, result) => {
         if (err) {
@@ -21,19 +21,32 @@ class ImageModel {
       }).end(file.buffer);
     });
 
+    return response;
+  }
+
+  static async upload ({ publicId, url, productId }) {
     try {
-      await connection.query(
+      const [newImage] = await connection.query(
         `
         INSERT INTO image (id, url, product_id)
         VALUES (?, ?, UUID_TO_BIN(?))
         `,
-        [response.public_id, response.url, productId]
+        [publicId, url, productId]
       );
+
+      return newImage.affectedRows > 0;
     } catch (error) {
       throw new Error('Error uploading image');
     }
+  }
 
-    return response.url;
+  static async deleteCurrent ({ id }) {
+    try {
+      const request = await cloudinary.uploader.destroy(id);
+      return request;
+    } catch (error) {
+      throw new Error('Error deleting image');
+    }
   }
 
   static async deletePrevious ({ id }) {
@@ -50,7 +63,7 @@ class ImageModel {
     try {
       await cloudinary.uploader.destroy(image[0].id);
     } catch (error) {
-      console.error(error);
+      throw new Error('Error deleting previous image');
     }
 
     try {

@@ -8,12 +8,22 @@ const createImageRouter = ({ imageModel }) => {
 
   const imageController = new ImageController({ imageModel });
 
-  imagesRouter.post('/:id',
+  imagesRouter.post('/cloudinary',
     checkAdminRole,
     multerValidation,
+    imageController.cloudinaryUpload
+  );
+  imagesRouter.post(
+    '/:id',
+    checkAdminRole,
     imageController.upload
   );
 
+  imagesRouter.delete(
+    '/delete/:id',
+    checkAdminRole,
+    imageController.deleteCurrent
+  );
   imagesRouter.delete('/:id',
     checkAdminRole,
     imageController.deletePrevious
