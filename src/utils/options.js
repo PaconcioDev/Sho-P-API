@@ -1,5 +1,4 @@
-// TODO: Delete localhost from whiteList
-const whiteList = ['http://localhost:5173', 'https://paconciodev.github.io'];
+const whiteList = ['https://sho-p-web.vercel.app/products/all'];
 const options = {
   origin: (origin, cb) => {
     if (whiteList.includes(origin) || !origin) {
