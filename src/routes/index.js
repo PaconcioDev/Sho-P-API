@@ -8,7 +8,7 @@ import { createImageRouter } from './images.js';
 
 function routerApi (app, productModel, categoryModel, userModel, authModel, orderModel, imageModel) {
   const mainRouter = Router();
-  app.use('/shop-api/v2', mainRouter);
+  app.use('/', mainRouter);
 
   mainRouter.use('/products', createProductRouter({ productModel }));
   mainRouter.use('/categories', createCategoryRouter({ categoryModel }));
