@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import { mailContent } from '../../utils/mailContent.js';
+import { config } from '../../config/config.js';
 
 class AuthModel {
   static async login ({ input }) {
