@@ -1,4 +1,4 @@
-const whiteList = ['https://sho-p-web.vercel.app/products/all'];
+const whiteList = ['https://sho-p-web.vercel.app'];
 const options = {
   origin: (origin, cb) => {
     if (whiteList.includes(origin) || !origin) {
