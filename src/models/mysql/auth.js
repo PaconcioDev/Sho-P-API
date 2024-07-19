@@ -1,17 +1,8 @@
+import { connection } from './index.js';
 import jwt from 'jsonwebtoken';
-import mysql from 'mysql2/promise';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
-import { config } from '../../config/config.js';
 import { mailContent } from '../../utils/mailContent.js';
-
-const connection = await mysql.createConnection({
-  host: config.dbHost,
-  user: config.dbUser,
-  port: config.dbPort,
-  password: config.dbPassword,
-  database: config.dbName
-});
 
 class AuthModel {
   static async login ({ input }) {

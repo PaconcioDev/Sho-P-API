@@ -1,16 +1,7 @@
-import mysql from 'mysql2/promise';
+import { connection } from './index.js';
 import bcrypt from 'bcrypt';
 import snakeCaseKeys from 'snakecase-keys';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter.js';
-import { config } from '../../config/config.js';
-
-const connection = await mysql.createConnection({
-  host: config.dbHost,
-  user: config.dbUser,
-  port: config.dbPort,
-  password: config.dbPassword,
-  database: config.dbName
-});
 
 class UserModel {
   static async getAll () {
@@ -153,7 +144,7 @@ class UserModel {
 
       await connection.query(
         `
-          DELETE FROM \`order\`
+          DELETE FROM \`order_table\`
           WHERE user_id = UUID_TO_BIN(?);
         `,
         [id]

@@ -1,14 +1,5 @@
-import mysql from 'mysql2/promise';
 import { cloudinary } from '../../config/cloudinaryConfig.js';
-import { config } from '../../config/config.js';
-
-const connection = await mysql.createConnection({
-  host: config.dbHost,
-  user: config.dbUser,
-  port: config.dbPort,
-  password: config.dbPassword,
-  database: config.dbName
-});
+import { connection } from './index.js';
 
 class ImageModel {
   static async cloudinaryUpload ({ file }) {

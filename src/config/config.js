@@ -13,7 +13,8 @@ const config = {
   mailPassword: process.env.MAIL_PASSWORD,
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
-  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+  myFrontend: process.env.MY_FRONTEND
 };
 
 export { config };

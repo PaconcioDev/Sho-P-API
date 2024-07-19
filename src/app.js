@@ -24,7 +24,7 @@ const createApp = ({
   routerApi(app, productModel, categoryModel, userModel, authModel, orderModel, imageModel);
 
   app.listen(config.port, () => {
-    console.log(`Listening on port http://localhost:${config.port}`);
+    console.log('App Started');
   });
 
   const restoreProducts = new CronJob('0 * * * *', restoreDeletedProducts);

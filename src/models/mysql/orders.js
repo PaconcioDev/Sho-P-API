@@ -1,13 +1,4 @@
-import mysql from 'mysql2/promise';
-import { config } from '../../config/config.js';
-
-const connection = await mysql.createConnection({
-  host: config.dbHost,
-  user: config.dbUser,
-  port: config.dbPort,
-  password: config.dbPassword,
-  database: config.dbName
-});
+import { connection } from './index.js';
 
 class OrderModel {
   static async getAll () {
@@ -19,7 +10,7 @@ class OrderModel {
           o.order_items AS orderItems,
           o.order_date AS date,
           o.total
-        FROM \`order\` as o
+        FROM \`order_table\` as o
       `
     );
     return orders;
@@ -34,7 +25,7 @@ class OrderModel {
           o.order_items AS orderItems,
           o.order_date AS date,
           o.total
-        FROM \`order\` as o
+        FROM \`order_table\` as o
         WHERE user_id = UUID_TO_BIN(?);
       `,
       [id]
@@ -52,7 +43,7 @@ class OrderModel {
           o.order_items AS orderItems,
           o.order_date AS date,
           o.total
-        FROM \`order\` as o
+        FROM \`order_table\` as o
         WHERE id = UUID_TO_BIN(?);
       `,
       [id]
@@ -77,7 +68,7 @@ class OrderModel {
     try {
       await connection.query(
         `
-          INSERT INTO \`order\` (id, user_id, order_date, order_items, total)
+          INSERT INTO \`order_table\` (id, user_id, order_date, order_items, total)
           VALUES (UUID_TO_BIN("${uuid}"), UUID_TO_BIN(?), ?, ?, ?);
         `,
         [userId, orderDate, orderItemsJson, total]
