@@ -148,7 +148,7 @@ class AuthModel {
       expiresIn: '5min'
     });
 
-    const link = `http://localhost:5173/account/recovery/${token}`;
+    const link = `https://sho-p-web.vercel.app/account/recovery/${token}`;
     const html = mailContent(link);
 
     const mail = {
