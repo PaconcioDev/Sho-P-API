@@ -15,14 +15,14 @@ class ImageModel {
     return response;
   }
 
-  static async upload ({ publicId, url, productId }) {
+  static async upload ({ publicId, imageUrl, productId }) {
     try {
       const [newImage] = await connection.query(
         `
         INSERT INTO image (id, url, product_id)
         VALUES (?, ?, UUID_TO_BIN(?))
         `,
-        [publicId, url, productId]
+        [publicId, imageUrl, productId]
       );
 
       return newImage.affectedRows > 0;

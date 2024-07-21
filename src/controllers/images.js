@@ -14,8 +14,8 @@ class ImageController {
 
   upload = async (req, res) => {
     const { id } = req.params;
-    const { publicId, url } = req.body;
-    const newImage = await this.imageModel.upload({ publicId, url, productId: id });
+    const { publicId, imageUrl } = req.body;
+    const newImage = await this.imageModel.upload({ publicId, imageUrl, productId: id });
     if (!newImage) {
       return res.status(409).json({ error: 'Failed uploading image' });
     }
