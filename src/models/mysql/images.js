@@ -3,16 +3,19 @@ import { connection } from './index.js';
 
 class ImageModel {
   static async cloudinaryUpload ({ file }) {
-    const response = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({}, (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      }).end(file.buffer);
-    });
-
-    return response;
+    try {
+      const response = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({}, (err, result) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(result);
+        }).end(file.buffer);
+      });
+      return response;
+    } catch (error) {
+      throw new Error('Error uploading to cloudinary: ' + error.message);
+    }
   }
 
   static async upload ({ publicId, imageUrl, productId }) {
