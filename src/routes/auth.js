@@ -19,6 +19,10 @@ const createAuthRouter = ({ authModel }) => {
     authController.login
   );
   authRouter.post(
+    '/check-token',
+    authController.checkExpiredToken
+  );
+  authRouter.post(
     '/change-password/:id',
     checkLogin,
     handleValidationError(updatePasswordSchema, 'body'),

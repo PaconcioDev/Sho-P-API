@@ -45,6 +45,19 @@ class AuthModel {
     };
   }
 
+  static async checkExpiredToken ({ token }) {
+    try {
+      const isExpired = jwt.verify(token, config.jwtSecret, (err, res) => {
+        if (err) return true;
+        return false;
+      });
+
+      return isExpired;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   static async changePassword ({ currentPassword, newPassword, id }) {
     const [user] = await connection.query(
       `

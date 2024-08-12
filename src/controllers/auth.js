@@ -18,6 +18,21 @@ class AuthController {
     });
   };
 
+  checkExpiredToken = async (req, res) => {
+    const authorization = req.get('authorization');
+    const token = authorization.substring(7);
+
+    const rta = await this.authModel.checkExpiredToken({
+      token
+    });
+
+    if (rta) {
+      return res.json({ error: 'Token expired', value: rta });
+    } else {
+      return res.json({ message: 'Token not expired', value: rta });
+    }
+  };
+
   changePassword = async (req, res) => {
     const { id } = req.token;
     const { currentPassword, password } = req.validatedData;
