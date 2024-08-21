@@ -1,4 +1,8 @@
-const whiteList = ['https://sho-p-web.vercel.app', 'http://localhost:5173', 'http://localhost:4173'];
+const whiteList = [
+  process.env.CORS_OPTION_ONE,
+  process.env.CORS_OPTION_TWO,
+  process.env.CORS_OPTION_THREE
+];
 const options = {
   origin: (origin, cb) => {
     if (whiteList.includes(origin) || !origin) {
