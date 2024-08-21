@@ -2,8 +2,8 @@ import z from 'zod';
 
 const name = z
   .string()
-  .min(2, 'Category name cannot have less than 2 characters')
-  .max(30, 'Category name cannot have more than 30 characters');
+  .min(3, 'Category name cannot have less than 3 characters')
+  .max(15, 'Category name cannot have more than 15 characters');
 
 const categorySchema = z.object({
   name
