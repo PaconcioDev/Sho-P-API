@@ -47,7 +47,7 @@ The **Sho-P API** counts with multiple endpoints to manage information about **p
 
 #### Get all products
 
-```http
+```
   GET /api/products
 ```
 
@@ -83,7 +83,7 @@ The **Sho-P API** counts with multiple endpoints to manage information about **p
 
 #### Get one product
 
-```http
+```
   GET /api/products/${id}
 ```
 
